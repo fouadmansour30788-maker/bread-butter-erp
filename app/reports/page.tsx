@@ -2,13 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { formatLBP } from '@/lib/utils'
 import { BarChart2, TrendingUp, TrendingDown, Target, PlusCircle } from 'lucide-react'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
+import { ProfitChartsWrapper as ProfitCharts } from '@/components/ProfitChartsWrapper'
 import type { WeeklyPL, SchoolPL, CategoryBreakdown } from '@/components/ProfitCharts'
-
-const ProfitCharts = dynamic(
-  () => import('@/components/ProfitCharts').then(m => m.ProfitCharts),
-  { ssr: false, loading: () => <div className="h-64 flex items-center justify-center text-gray-400 text-sm">Loading charts…</div> }
-)
 
 const CATEGORY_LABELS: Record<string, string> = {
   salary: 'Salaries', electricity: 'Electricity', rent: 'Rent',
@@ -59,7 +54,7 @@ export default async function ReportsPage() {
   for (const di of delivItems) {
     const k       = `${di.batch_id}:${di.product_id}`
     const sold    = Math.max(0, di.delivered_qty - (ccMap.get(k) ?? 0) - (weMap.get(k) ?? 0))
-    const costUsd = (di.products as { cost_price_usd: number } | null)?.cost_price_usd ?? 0
+    const costUsd = (di.products as unknown as { cost_price_usd: number } | null)?.cost_price_usd ?? 0
     batchDC.set(di.batch_id, (batchDC.get(di.batch_id) ?? 0) + sold * costUsd * 90_000)
   }
 
