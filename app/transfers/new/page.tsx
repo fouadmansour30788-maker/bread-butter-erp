@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { ArrowLeft, ArrowRightLeft } from 'lucide-react'
 import Link from 'next/link'
@@ -19,7 +19,7 @@ interface Product {
   qty_per_box: number
 }
 
-export default function NewTransferPage() {
+function NewTransferForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const preselectedFrom = searchParams.get('from') ?? ''
@@ -86,6 +86,7 @@ export default function NewTransferPage() {
   const selectedProduct = products.find((p) => p.id === productId)
 
   if (loading) return <div className="p-8 text-gray-500">Loading…</div>
+
 
   return (
     <div className="p-8 max-w-lg" style={{ background: '#f8fafc', minHeight: '100vh' }}>
@@ -182,5 +183,13 @@ export default function NewTransferPage() {
         </div>
       </form>
     </div>
+  )
+}
+
+export default function NewTransferPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-gray-500">Loading…</div>}>
+      <NewTransferForm />
+    </Suspense>
   )
 }
