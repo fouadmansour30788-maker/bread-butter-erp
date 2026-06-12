@@ -4,17 +4,18 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, School, Package, Truck,
-  ClipboardList, BarChart3, ShoppingBag
+  ClipboardList, BarChart3, ShoppingBag, Receipt
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const nav = [
-  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/schools', label: 'Schools', icon: School },
-  { href: '/products', label: 'Products', icon: Package },
-  { href: '/batches', label: 'Weekly Batches', icon: Truck },
-  { href: '/reconciliation', label: 'Reconciliation', icon: ClipboardList },
-  { href: '/reports', label: 'Reports', icon: BarChart3 },
+  { href: '/',              label: 'Dashboard',      icon: LayoutDashboard },
+  { href: '/schools',       label: 'Schools',         icon: School },
+  { href: '/products',      label: 'Products',        icon: Package },
+  { href: '/batches',       label: 'Weekly Batches',  icon: Truck },
+  { href: '/reconciliation',label: 'Reconciliation',  icon: ClipboardList },
+  { href: '/expenses',      label: 'Expenses',        icon: Receipt },
+  { href: '/reports',       label: 'P&L Reports',     icon: BarChart3 },
 ]
 
 export function Sidebar() {

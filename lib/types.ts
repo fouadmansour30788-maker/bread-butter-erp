@@ -74,6 +74,27 @@ export type CashCollection = {
   notes: string | null
 }
 
+export type ExpenseCategory =
+  | 'salary'
+  | 'electricity'
+  | 'rent'
+  | 'transport'
+  | 'maintenance'
+  | 'marketing'
+  | 'communications'
+  | 'other'
+
+export type Expense = {
+  id: string
+  school_id: string | null
+  category: ExpenseCategory
+  description: string | null
+  amount_lbp: number
+  week_start: string
+  created_at: string
+  schools?: { name: string } | null
+}
+
 export type ReconciliationSummary = {
   batch_id: string
   school_id: string
