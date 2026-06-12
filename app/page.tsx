@@ -6,7 +6,6 @@ import {
   Truck, ClipboardCheck, BarChart2, Store
 } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -33,21 +32,11 @@ export default async function DashboardPage() {
   return (
     <div className="p-8 space-y-8" style={{ background: '#f8fafc', minHeight: '100vh' }}>
 
-      {/* Hero Banner with real photo */}
-      <div className="relative rounded-2xl overflow-hidden" style={{ height: 220 }}>
-        {/* Background photo */}
-        <Image
-          src="https://images.unsplash.com/photo-4TVl5LlZyKk?w=1400&h=440&fit=crop&q=80"
-          alt="School kiosk"
-          fill
-          style={{ objectFit: 'cover', objectPosition: 'center' }}
-          priority
-        />
-        {/* Gradient overlay */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(100deg, rgba(146,64,14,0.92) 0%, rgba(217,119,6,0.80) 50%, rgba(0,0,0,0.30) 100%)',
-        }} />
+      {/* Hero Banner */}
+      <div className="relative rounded-2xl overflow-hidden" style={{ height: 220, background: 'linear-gradient(110deg, #78350f 0%, #92400e 30%, #b45309 60%, #d97706 85%, #f59e0b 100%)' }}>
+        {/* Decorative circles */}
+        <div style={{ position: 'absolute', right: -60, top: -60, width: 300, height: 300, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
+        <div style={{ position: 'absolute', right: 60, bottom: -80, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
 
         {/* Content */}
         <div className="relative z-10 p-8 h-full flex flex-col justify-between">
@@ -77,20 +66,16 @@ export default async function DashboardPage() {
 
       {/* Photo + feature cards row */}
       <div className="grid grid-cols-3 gap-4">
-        {/* Student photo card */}
-        <div className="relative rounded-2xl overflow-hidden" style={{ height: 160, boxShadow: '0 4px 20px rgba(0,0,0,0.10)' }}>
-          <Image
-            src="https://images.unsplash.com/photo-r2Tr3du99DM?w=600&h=320&fit=crop&q=80"
-            alt="Student"
-            fill
-            style={{ objectFit: 'cover', objectPosition: 'center top' }}
-          />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 60%)' }} />
-          <div className="absolute bottom-4 left-4 z-10">
-            <p className="text-white font-semibold text-sm">School Kiosks</p>
-            <p className="text-gray-300 text-xs">5 locations, North Lebanon</p>
-          </div>
-        </div>
+        {/* Kiosk locations card */}
+        <FeatureCard
+          icon={<Store size={22} />}
+          label="5 Kiosk Locations"
+          sub="North Lebanon — Tripoli area schools"
+          iconBg="linear-gradient(135deg, #3b82f6, #1d4ed8)"
+          iconShadow="rgba(59,130,246,0.35)"
+          cardBg="linear-gradient(135deg, #eff6ff, #dbeafe)"
+          border="#bfdbfe"
+        />
 
         {/* Feature card */}
         <FeatureCard
