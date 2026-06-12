@@ -1,9 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { formatLBP } from '@/lib/utils'
-import { BarChart2, TrendingUp, TrendingDown, Target, PlusCircle } from 'lucide-react'
+import {
+  BarChart2, TrendingUp, TrendingDown, Target, PlusCircle,
+  CheckCircle, AlertTriangle, AlertCircle, Info, Lightbulb, Zap,
+} from 'lucide-react'
 import Link from 'next/link'
-import { ProfitChartsWrapper as ProfitCharts } from '@/components/ProfitChartsWrapper'
-import type { WeeklyPL, SchoolPL, CategoryBreakdown } from '@/components/ProfitCharts'
+import { ProfitChartsWrapper } from '@/components/ProfitChartsWrapper'
+import type { WeeklyPL, SchoolPL, CategoryBreakdown, WeeklyMargin } from '@/components/ProfitCharts'
+import type { RevBreakdown } from '@/components/ProfitCharts'
 
 const CATEGORY_LABELS: Record<string, string> = {
   salary: 'Salaries', electricity: 'Electricity', rent: 'Rent',
@@ -17,9 +21,28 @@ const CATEGORY_COLORS: Record<string, string> = {
 }
 
 function fmtWeek(dateStr: string) {
-  try {
-    return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-  } catch { return dateStr }
+  try { return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }
+  catch { return dateStr }
+}
+
+function fmtM(v: number) {
+  const a = Math.abs(v)
+  return a >= 1 ? `${v.toFixed(1)}M` : `${(v * 1000).toFixed(0)}K`
+}
+
+// ── Insight / Recommendation types ──────────────────────────────────────────
+type Level = 'success' | 'info' | 'warning' | 'danger'
+
+interface Insight {
+  level: Level
+  title: string
+  detail: string
+}
+
+interface Recommendation {
+  priority: 'high' | 'medium' | 'low'
+  title: string
+  action: string
 }
 
 export default async function ReportsPage() {
@@ -39,7 +62,7 @@ export default async function ReportsPage() {
   const wasteItems  = weRes.data    ?? []
   const expenses    = expRes.data   ?? []
 
-  // Direct cost per batch: sold qty × product cost × 90,000 LBP/USD
+  // ── Direct cost per batch ────────────────────────────────────────────────
   const ccMap = new Map<string, number>()
   for (const c of closeCounts) {
     const k = `${c.batch_id}:${c.product_id}`
@@ -58,7 +81,7 @@ export default async function ReportsPage() {
     batchDC.set(di.batch_id, (batchDC.get(di.batch_id) ?? 0) + sold * costUsd * 90_000)
   }
 
-  // Weekly P&L
+  // ── Weekly P&L ───────────────────────────────────────────────────────────
   type WE = { sales: number; dc: number; ic: number }
   const weekMap = new Map<string, WE>()
   for (const r of recon) {
@@ -73,18 +96,24 @@ export default async function ReportsPage() {
     else weekMap.set(exp.week_start, { sales: 0, dc: 0, ic: Number(exp.amount_lbp) })
   }
 
-  const weeklyData: WeeklyPL[] = Array.from(weekMap.entries())
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([week, d]) => ({
-      week:         fmtWeek(week),
-      sales:        d.sales / 1e6,
-      directCost:   d.dc   / 1e6,
-      grossProfit:  (d.sales - d.dc)         / 1e6,
-      indirectCost: d.ic   / 1e6,
-      netProfit:    (d.sales - d.dc - d.ic)  / 1e6,
-    }))
+  const sortedWeeks = Array.from(weekMap.entries()).sort(([a], [b]) => a.localeCompare(b))
 
-  // Global KPIs
+  const weeklyData: WeeklyPL[] = sortedWeeks.map(([week, d]) => ({
+    week:         fmtWeek(week),
+    sales:        d.sales / 1e6,
+    directCost:   d.dc   / 1e6,
+    grossProfit:  (d.sales - d.dc)        / 1e6,
+    indirectCost: d.ic   / 1e6,
+    netProfit:    (d.sales - d.dc - d.ic) / 1e6,
+  }))
+
+  const marginData: WeeklyMargin[] = sortedWeeks.map(([week, d]) => ({
+    week: fmtWeek(week),
+    gm:   d.sales > 0 ? (d.sales - d.dc) / d.sales * 100 : 0,
+    nm:   d.sales > 0 ? (d.sales - d.dc - d.ic) / d.sales * 100 : 0,
+  }))
+
+  // ── Global KPIs ──────────────────────────────────────────────────────────
   const totalSales     = recon.reduce((s, r) => s + Number(r.expected_cash_lbp), 0)
   const totalDC        = recon.reduce((s, r) => s + (batchDC.get(r.batch_id) ?? 0), 0)
   const totalIC        = expenses.reduce((s, e) => s + Number(e.amount_lbp), 0)
@@ -94,7 +123,11 @@ export default async function ReportsPage() {
   const netMarginPct   = totalSales > 0 ? (netProfit   / totalSales * 100) : 0
   const breakEvenSales = grossMarginPct > 0 ? totalIC / (grossMarginPct / 100) : 0
 
-  // Per-school P&L
+  const revBreakdown: RevBreakdown = totalSales > 0
+    ? { dc: totalDC / totalSales * 100, ic: totalIC / totalSales * 100, np: netProfit / totalSales * 100 }
+    : { dc: 0, ic: 0, np: 0 }
+
+  // ── Per-school P&L ───────────────────────────────────────────────────────
   type SE = { name: string; sales: number; dc: number; ic: number }
   const schoolMap = new Map<string, SE>()
   for (const r of recon) {
@@ -119,7 +152,7 @@ export default async function ReportsPage() {
     netProfit:   (s.sales - s.dc - s.ic) / 1e6,
   }))
 
-  // Expense categories
+  // ── Expense categories ───────────────────────────────────────────────────
   const catMap = new Map<string, number>()
   for (const exp of expenses) catMap.set(exp.category, (catMap.get(exp.category) ?? 0) + Number(exp.amount_lbp))
   const categoryData: CategoryBreakdown[] = Array.from(catMap.entries()).map(([cat, amt]) => ({
@@ -128,19 +161,131 @@ export default async function ReportsPage() {
     color: CATEGORY_COLORS[cat] ?? '#94a3b8',
   }))
 
-  // P&L table rows (descending)
+  // ── Detailed table ───────────────────────────────────────────────────────
   const plTable = Array.from(weekMap.entries())
     .sort(([a], [b]) => b.localeCompare(a))
     .map(([week, d]) => {
       const gp = d.sales - d.dc
       const np = gp - d.ic
-      return {
-        week,
-        sales: d.sales, dc: d.dc, gp, ic: d.ic, np,
-        gm: d.sales > 0 ? (gp / d.sales * 100) : 0,
-        nm: d.sales > 0 ? (np / d.sales * 100) : 0,
-      }
+      return { week, sales: d.sales, dc: d.dc, gp, ic: d.ic, np,
+        gm: d.sales > 0 ? gp / d.sales * 100 : 0,
+        nm: d.sales > 0 ? np / d.sales * 100 : 0 }
     })
+
+  // ── Auto Insights ────────────────────────────────────────────────────────
+  const insights: Insight[] = []
+
+  // 1. Sales week-over-week
+  if (sortedWeeks.length >= 2) {
+    const [, prev] = sortedWeeks[sortedWeeks.length - 2]
+    const [, curr] = sortedWeeks[sortedWeeks.length - 1]
+    if (prev.sales > 0) {
+      const chg = (curr.sales - prev.sales) / prev.sales * 100
+      if (chg >= 10)
+        insights.push({ level: 'success', title: `Sales up ${chg.toFixed(0)}% this week`, detail: `${fmtM(curr.sales / 1e6)}M vs ${fmtM(prev.sales / 1e6)}M LBP last week` })
+      else if (chg <= -10)
+        insights.push({ level: 'warning', title: `Sales dropped ${Math.abs(chg).toFixed(0)}% this week`, detail: `From ${fmtM(prev.sales / 1e6)}M to ${fmtM(curr.sales / 1e6)}M LBP` })
+      else
+        insights.push({ level: 'info', title: `Sales stable (${chg > 0 ? '+' : ''}${chg.toFixed(1)}% WoW)`, detail: `${fmtM(curr.sales / 1e6)}M LBP this week — consistent performance` })
+    }
+  }
+
+  // 2. Gross margin health
+  if (totalSales > 0) {
+    if (grossMarginPct >= 30)
+      insights.push({ level: 'success', title: `Excellent gross margin: ${grossMarginPct.toFixed(1)}%`, detail: 'Above the 25–30% benchmark for school food kiosks' })
+    else if (grossMarginPct >= 25)
+      insights.push({ level: 'success', title: `Gross margin on target: ${grossMarginPct.toFixed(1)}%`, detail: 'Meeting the 25% benchmark — keep pricing steady' })
+    else if (grossMarginPct >= 15)
+      insights.push({ level: 'warning', title: `Gross margin below target: ${grossMarginPct.toFixed(1)}%`, detail: 'Target is 25%+ — review pricing or negotiate supplier rates' })
+    else
+      insights.push({ level: 'danger', title: `Critical gross margin: ${grossMarginPct.toFixed(1)}%`, detail: 'Product costs are consuming nearly all revenue — urgent action needed' })
+  }
+
+  // 3. Net profit status
+  if (totalSales > 0) {
+    if (netProfit > 0)
+      insights.push({ level: 'success', title: `Net profitable: ${formatLBP(netProfit)}`, detail: `${netMarginPct.toFixed(1)}% net margin — all costs covered` })
+    else if (netProfit < 0)
+      insights.push({ level: 'danger', title: `Operating at a loss: ${formatLBP(Math.abs(netProfit))}`, detail: `Indirect costs exceed gross profit by ${formatLBP(Math.abs(netProfit))}` })
+  }
+
+  // 4. Break-even safety margin
+  if (breakEvenSales > 0 && totalSales > 0) {
+    const safetyPct = (totalSales - breakEvenSales) / totalSales * 100
+    if (safetyPct >= 30)
+      insights.push({ level: 'success', title: `Strong safety margin: ${safetyPct.toFixed(0)}% above break-even`, detail: `Sales can fall ${safetyPct.toFixed(0)}% before losses — very stable` })
+    else if (safetyPct >= 10)
+      insights.push({ level: 'info', title: `Safety margin: ${safetyPct.toFixed(0)}% above break-even`, detail: `${formatLBP(totalSales - breakEvenSales)} buffer — moderate resilience to revenue dips` })
+    else if (safetyPct >= 0)
+      insights.push({ level: 'warning', title: `Thin safety margin: only ${safetyPct.toFixed(0)}% above break-even`, detail: 'A small revenue drop could push you into losses' })
+    else
+      insights.push({ level: 'danger', title: `Below break-even by ${formatLBP(breakEvenSales - totalSales)}`, detail: 'Every week at this volume still loses money' })
+  }
+
+  // 5. Dominant expense category
+  if (categoryData.length > 0 && totalIC > 0) {
+    const top = [...categoryData].sort((a, b) => b.value - a.value)[0]
+    const topPct = (top.value * 1e6 / totalIC) * 100
+    if (topPct > 50)
+      insights.push({ level: 'info', title: `${top.name} = ${topPct.toFixed(0)}% of indirect costs`, detail: 'Single category dominates expenses — review for optimization' })
+  }
+
+  // 6. Best vs worst school
+  if (schoolData.length >= 2) {
+    const byNP  = [...schoolData].sort((a, b) => b.netProfit - a.netProfit)
+    const best  = byNP[0]
+    const worst = byNP[byNP.length - 1]
+    if (best.netProfit > worst.netProfit + 0.3)
+      insights.push({ level: 'info', title: `${best.name} leads with ${fmtM(best.netProfit)}M net profit`, detail: `${fmtM(best.netProfit - worst.netProfit)}M ahead of ${worst.name} — investigate the gap` })
+    if (worst.netProfit < 0)
+      insights.push({ level: 'danger', title: `${worst.name} running at a loss`, detail: `Net: ${fmtM(worst.netProfit)}M LBP — costs exceed its revenue share` })
+  }
+
+  // 7. Best week ever
+  if (weeklyData.length > 0) {
+    const best = [...weeklyData].sort((a, b) => b.netProfit - a.netProfit)[0]
+    if (best.netProfit > 0)
+      insights.push({ level: 'info', title: `Best week: ${best.week} with ${fmtM(best.netProfit)}M net profit`, detail: 'Use this as your performance benchmark for all locations' })
+  }
+
+  // 8. Unreconciled batches
+  const openBatches = recon.filter(r => r.status !== 'closed')
+  if (openBatches.length > 0) {
+    const names = [...new Set(openBatches.map(r => r.school_name ?? ''))].join(', ')
+    insights.push({ level: 'warning', title: `${openBatches.length} batch(es) not yet closed`, detail: `Pending: ${names} — close to finalize the financial picture` })
+  }
+
+  // ── Recommendations ──────────────────────────────────────────────────────
+  const recs: Recommendation[] = []
+
+  if (grossMarginPct > 0 && grossMarginPct < 25)
+    recs.push({ priority: 'high', title: 'Improve gross margin to 25%+', action: `Current GM is ${grossMarginPct.toFixed(1)}%. Raise selling prices by ~${(25 - grossMarginPct).toFixed(0)}% or renegotiate supplier costs on high-volume products` })
+
+  if (netProfit < 0)
+    recs.push({ priority: 'high', title: 'Cut costs to reach profitability', action: `You need ${formatLBP(Math.abs(netProfit))} less in expenses OR more sales. Start by reviewing the largest expense category` })
+
+  if (breakEvenSales > 0 && totalSales < breakEvenSales)
+    recs.push({ priority: 'high', title: 'Increase sales volume to break even', action: `You need ${formatLBP(breakEvenSales - totalSales)} more in sales at your current margin to cover indirect costs` })
+
+  if (openBatches.length > 0)
+    recs.push({ priority: 'high', title: `Close ${openBatches.length} pending reconciliation(s)`, action: 'Unreconciled batches mean you are working with incomplete financial data — close them before the next delivery' })
+
+  if (categoryData.length > 0 && totalIC > 0) {
+    const topCat = [...categoryData].sort((a, b) => b.value - a.value)[0]
+    const topPct = (topCat.value * 1e6 / totalIC) * 100
+    if (topPct > 50)
+      recs.push({ priority: 'medium', title: `Optimize ${topCat.name} (${topPct.toFixed(0)}% of expenses)`, action: `Your largest cost category is ${topCat.name}. Explore if there are cheaper alternatives, part-time options, or operational changes to reduce this` })
+  }
+
+  if (schoolData.length >= 2) {
+    const worst = [...schoolData].sort((a, b) => a.netProfit - b.netProfit)[0]
+    if (worst.netProfit < 0)
+      recs.push({ priority: 'medium', title: `Review operations at ${worst.name}`, action: `This location is loss-making. Conduct a site visit to review cash handling, waste levels, and local pricing` })
+  }
+
+  if (grossMarginPct >= 25 && netMarginPct >= 10 && openBatches.length === 0)
+    recs.push({ priority: 'low', title: 'Consider expanding to a 6th school', action: 'Business fundamentals are strong. Your current cost structure may scale well with one additional location at low marginal cost' })
 
   const hasData = recon.length > 0 || expenses.length > 0
 
@@ -152,14 +297,12 @@ export default async function ReportsPage() {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Profit &amp; Loss Report</h2>
           <p className="text-gray-500 text-sm mt-0.5">
-            {recon.length} reconciled batches · {expenses.length} expense entries
+            {recon.length} reconciled batches · {expenses.length} expense entries · {insights.length} insights
           </p>
         </div>
-        <Link
-          href="/expenses/new"
+        <Link href="/expenses/new"
           className="inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors"
-          style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
-        >
+          style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
           <PlusCircle size={15} className="text-indigo-500" /> Add Expense
         </Link>
       </div>
@@ -168,9 +311,10 @@ export default async function ReportsPage() {
       <div className="grid grid-cols-5 gap-4">
         <KPICard label="Total Sales"   value={formatLBP(totalSales)}  sub="Gross revenue"            accent="#f59e0b" />
         <KPICard label="Direct Cost"   value={formatLBP(totalDC)}     sub={`${grossMarginPct.toFixed(1)}% gross margin`} accent="#ef4444" />
-        <KPICard label="Gross Profit"  value={formatLBP(grossProfit)} sub="After product costs"      accent="#10b981" positive={grossProfit} />
+        <KPICard label="Gross Profit"  value={formatLBP(grossProfit)} sub="After product costs"      accent="#10b981" signed={grossProfit} />
         <KPICard label="Indirect Cost" value={formatLBP(totalIC)}     sub="Salaries, bills…"         accent="#6366f1" />
-        <KPICard label="Net Profit"    value={formatLBP(netProfit)}   sub={`${netMarginPct.toFixed(1)}% net margin`} accent={netProfit >= 0 ? '#06b6d4' : '#ef4444'} positive={netProfit} />
+        <KPICard label="Net Profit"    value={formatLBP(Math.abs(netProfit))} sub={`${netMarginPct.toFixed(1)}% net margin`}
+          accent={netProfit >= 0 ? '#06b6d4' : '#ef4444'} signed={netProfit} prefix={netProfit < 0 ? '−' : ''} />
       </div>
 
       {/* Break-Even */}
@@ -178,12 +322,60 @@ export default async function ReportsPage() {
         <BreakEvenCard breakEvenSales={breakEvenSales} totalSales={totalSales} grossMarginPct={grossMarginPct} />
       )}
 
+      {/* ── Insights + Recommendations ──────────────────────────────────── */}
+      {hasData && (
+        <div className="grid grid-cols-2 gap-6">
+
+          {/* Auto Analysis */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-6" style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.06)' }}>
+            <div className="flex items-center gap-2 mb-4">
+              <div style={{ width: 32, height: 32, borderRadius: 9, background: 'linear-gradient(135deg,#6366f1,#4338ca)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Zap size={16} color="white" />
+              </div>
+              <h3 className="font-semibold text-gray-900">Auto Analysis</h3>
+            </div>
+            {insights.length === 0 ? (
+              <p className="text-gray-400 text-sm">Add data to generate insights</p>
+            ) : (
+              <div className="space-y-2.5">
+                {insights.map((ins, i) => <InsightCard key={i} insight={ins} />)}
+              </div>
+            )}
+          </div>
+
+          {/* Recommendations */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-6" style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.06)' }}>
+            <div className="flex items-center gap-2 mb-4">
+              <div style={{ width: 32, height: 32, borderRadius: 9, background: 'linear-gradient(135deg,#f59e0b,#b45309)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Lightbulb size={16} color="white" />
+              </div>
+              <h3 className="font-semibold text-gray-900">Recommendations</h3>
+            </div>
+            {recs.length === 0 ? (
+              <div className="flex items-center gap-3 p-4 bg-green-50 rounded-xl">
+                <CheckCircle size={20} className="text-green-600 flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold text-green-800">Looking good!</p>
+                  <p className="text-xs text-green-600 mt-0.5">No critical recommendations right now. Keep monitoring weekly.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {recs.map((rec, i) => <RecCard key={i} rec={rec} />)}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Charts */}
       {hasData ? (
-        <ProfitCharts
+        <ProfitChartsWrapper
           weeklyData={weeklyData}
           schoolData={schoolData}
           categoryData={categoryData}
+          marginData={marginData}
+          revBreakdown={revBreakdown}
           breakEvenSales={breakEvenSales / 1e6}
           totalSales={totalSales / 1e6}
         />
@@ -246,17 +438,54 @@ export default async function ReportsPage() {
 
 // ── Sub-components ───────────────────────────────────────────────────────────
 
-function KPICard({ label, value, sub, accent, positive }: {
-  label: string; value: string; sub: string; accent: string; positive?: number
+function InsightCard({ insight }: { insight: Insight }) {
+  const config: Record<Level, { border: string; bg: string; icon: React.ReactNode }> = {
+    success: { border: '#10b981', bg: '#f0fdf4', icon: <CheckCircle size={14} className="text-green-600 flex-shrink-0" /> },
+    info:    { border: '#3b82f6', bg: '#eff6ff', icon: <Info         size={14} className="text-blue-500 flex-shrink-0" /> },
+    warning: { border: '#f59e0b', bg: '#fffbeb', icon: <AlertTriangle size={14} className="text-amber-500 flex-shrink-0" /> },
+    danger:  { border: '#ef4444', bg: '#fef2f2', icon: <AlertCircle  size={14} className="text-red-500 flex-shrink-0" /> },
+  }
+  const c = config[insight.level]
+  return (
+    <div style={{ borderLeft: `3px solid ${c.border}`, background: c.bg, borderRadius: '0 10px 10px 0', padding: '10px 12px', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+      <div style={{ marginTop: 1 }}>{c.icon}</div>
+      <div>
+        <p style={{ fontSize: 13, fontWeight: 600, color: '#111827', lineHeight: 1.4 }}>{insight.title}</p>
+        <p style={{ fontSize: 11, color: '#6b7280', marginTop: 2, lineHeight: 1.4 }}>{insight.detail}</p>
+      </div>
+    </div>
+  )
+}
+
+function RecCard({ rec }: { rec: Recommendation }) {
+  const pMap = {
+    high:   { bg: '#fef2f2', border: '#fecaca', badge: '#ef4444', label: 'High Priority' },
+    medium: { bg: '#fffbeb', border: '#fde68a', badge: '#f59e0b', label: 'Medium' },
+    low:    { bg: '#f0fdf4', border: '#bbf7d0', badge: '#10b981', label: 'Low' },
+  }
+  const p = pMap[rec.priority]
+  return (
+    <div style={{ background: p.bg, border: `1px solid ${p.border}`, borderRadius: 12, padding: '12px 14px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+        <span style={{ fontSize: 10, fontWeight: 700, color: 'white', background: p.badge, padding: '2px 8px', borderRadius: 20 }}>{p.label}</span>
+        <p style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{rec.title}</p>
+      </div>
+      <p style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.5 }}>{rec.action}</p>
+    </div>
+  )
+}
+
+function KPICard({ label, value, sub, accent, signed, prefix = '' }: {
+  label: string; value: string; sub: string; accent: string; signed?: number; prefix?: string
 }) {
-  const numColor = positive === undefined ? '#111827' : positive >= 0 ? '#10b981' : '#ef4444'
+  const numColor = signed === undefined ? '#111827' : signed >= 0 ? '#10b981' : '#ef4444'
   return (
     <div className="bg-white rounded-2xl p-5" style={{
       borderTop: `4px solid ${accent}`, border: '1px solid #e5e7eb', borderTopColor: accent,
       boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
     }}>
       <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-2">{label}</p>
-      <p className="text-lg font-bold leading-tight" style={{ color: numColor }}>{value}</p>
+      <p className="text-lg font-bold leading-tight" style={{ color: numColor }}>{prefix}{value}</p>
       <p className="text-xs text-gray-400 mt-1 leading-snug">{sub}</p>
     </div>
   )
@@ -270,33 +499,24 @@ function PctBadge({ val, hi, lo }: { val: number; hi: number; lo: number }) {
 function BreakEvenCard({ breakEvenSales, totalSales, grossMarginPct }: {
   breakEvenSales: number; totalSales: number; grossMarginPct: number
 }) {
-  const isAbove      = totalSales >= breakEvenSales
-  const safety       = totalSales - breakEvenSales
-  const barMax       = Math.max(totalSales, breakEvenSales) * 1.1 || 1
-  const bePct        = Math.min(96, (breakEvenSales / barMax) * 100)
-  const sPct         = Math.min(96, (totalSales     / barMax) * 100)
-
+  const isAbove = totalSales >= breakEvenSales
+  const safety  = totalSales - breakEvenSales
+  const barMax  = Math.max(totalSales, breakEvenSales) * 1.1 || 1
+  const bePct   = Math.min(96, (breakEvenSales / barMax) * 100)
+  const sPct    = Math.min(96, (totalSales     / barMax) * 100)
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6" style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.06)' }}>
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center gap-3">
-          <div style={{
-            width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-            background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 12px rgba(139,92,246,0.28)',
-          }}>
+          <div style={{ width: 44, height: 44, borderRadius: 12, flexShrink: 0, background: 'linear-gradient(135deg,#8b5cf6,#6d28d9)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(139,92,246,0.28)' }}>
             <Target size={20} color="white" />
           </div>
           <div>
             <h3 className="font-semibold text-gray-900">Break-Even Analysis</h3>
-            <p className="text-xs text-gray-400 mt-0.5">
-              At {grossMarginPct.toFixed(1)}% gross margin — need {formatLBP(breakEvenSales)} in sales to cover all indirect costs
-            </p>
+            <p className="text-xs text-gray-400 mt-0.5">At {grossMarginPct.toFixed(1)}% gross margin — need {formatLBP(breakEvenSales)} in sales to cover all indirect costs</p>
           </div>
         </div>
-        <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold
-          ${isAbove ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'}`}>
+        <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${isAbove ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'}`}>
           {isAbove ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
           {isAbove ? 'Above Break-Even' : 'Below Break-Even'}
         </span>
@@ -313,18 +533,12 @@ function BreakEvenCard({ breakEvenSales, totalSales, grossMarginPct }: {
           </div>
         ))}
       </div>
-      {/* Gauge */}
       <div style={{ height: 28, background: '#f3f4f6', borderRadius: 14, overflow: 'hidden', position: 'relative' }}>
-        <div style={{
-          position: 'absolute', left: 0, top: 0, height: '100%', width: `${sPct}%`, borderRadius: 14,
-          background: isAbove ? 'linear-gradient(90deg,#fde68a,#34d399)' : 'linear-gradient(90deg,#fde68a,#fca5a5)',
-        }} />
+        <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${sPct}%`, borderRadius: 14, background: isAbove ? 'linear-gradient(90deg,#fde68a,#34d399)' : 'linear-gradient(90deg,#fde68a,#fca5a5)' }} />
         <div style={{ position: 'absolute', left: `${bePct}%`, top: 0, height: '100%', width: 3, background: '#8b5cf6', transform: 'translateX(-1px)' }} />
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 5, fontSize: 11, color: '#9ca3af' }}>
-        <span>0</span>
-        <span style={{ color: '#8b5cf6', fontWeight: 600 }}>▲ Break-even</span>
-        <span>Current sales →</span>
+        <span>0</span><span style={{ color: '#8b5cf6', fontWeight: 600 }}>▲ Break-even</span><span>Current sales →</span>
       </div>
     </div>
   )
@@ -333,14 +547,11 @@ function BreakEvenCard({ breakEvenSales, totalSales, grossMarginPct }: {
 function EmptyState() {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center" style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.06)' }}>
-      <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
-        style={{ background: 'linear-gradient(135deg, #eff6ff, #dbeafe)' }}>
+      <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style={{ background: 'linear-gradient(135deg,#eff6ff,#dbeafe)' }}>
         <BarChart2 size={28} className="text-blue-600" />
       </div>
       <p className="text-gray-700 font-semibold text-lg">No data yet</p>
-      <p className="text-gray-400 text-sm mt-1 max-w-xs mx-auto">
-        Create reconciled weekly batches and add expense entries to generate your P&amp;L report.
-      </p>
+      <p className="text-gray-400 text-sm mt-1 max-w-xs mx-auto">Create reconciled batches and add expenses to generate your P&amp;L report.</p>
       <div className="flex items-center justify-center gap-3 mt-5">
         <Link href="/batches/new" className="inline-flex items-center gap-2 bg-amber-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl hover:bg-amber-400 transition-colors">
           <PlusCircle size={15} /> New Batch

@@ -1,10 +1,21 @@
 'use client'
 
+import React from 'react'
 import dynamic from 'next/dynamic'
-import type { WeeklyPL, SchoolPL, CategoryBreakdown } from './ProfitCharts'
+import type { WeeklyPL, SchoolPL, CategoryBreakdown, WeeklyMargin, RevBreakdown } from './ProfitCharts'
 
-const ProfitCharts = dynamic(
-  () => import('./ProfitCharts').then(m => m.ProfitCharts),
+export type ChartProps = {
+  weeklyData: WeeklyPL[]
+  schoolData: SchoolPL[]
+  categoryData: CategoryBreakdown[]
+  marginData: WeeklyMargin[]
+  revBreakdown: RevBreakdown
+  breakEvenSales: number
+  totalSales: number
+}
+
+const ProfitCharts = dynamic<ChartProps>(
+  () => import('./ProfitCharts').then(m => m.ProfitCharts as React.ComponentType<ChartProps>),
   {
     ssr: false,
     loading: () => (
@@ -15,12 +26,6 @@ const ProfitCharts = dynamic(
   }
 )
 
-export function ProfitChartsWrapper(props: {
-  weeklyData: WeeklyPL[]
-  schoolData: SchoolPL[]
-  categoryData: CategoryBreakdown[]
-  breakEvenSales: number
-  totalSales: number
-}) {
+export function ProfitChartsWrapper(props: ChartProps) {
   return <ProfitCharts {...props} />
 }
