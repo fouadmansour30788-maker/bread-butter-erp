@@ -10,6 +10,7 @@ interface Batch {
   id: string
   week_start: string
   week_end: string
+  kiosk_label: string
   school: { name: string }
 }
 
@@ -40,7 +41,7 @@ function NewTransferForm() {
     const supabase = createClient()
     supabase
       .from('weekly_batches')
-      .select('id, week_start, week_end, school:schools(name)')
+      .select('id, week_start, week_end, kiosk_label, school:schools(name)')
       .neq('status', 'closed')
       .order('week_start', { ascending: false })
       .then(({ data }) => {
@@ -111,7 +112,7 @@ function NewTransferForm() {
                 className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 text-sm focus:outline-none focus:border-amber-500">
                 <option value="">Select…</option>
                 {batches.map(b => (
-                  <option key={b.id} value={b.id}>{b.school.name} ({b.week_start})</option>
+                  <option key={b.id} value={b.id}>{b.school.name} – {b.kiosk_label ?? 'Main'} ({b.week_start})</option>
                 ))}
               </select>
             </div>
@@ -121,7 +122,7 @@ function NewTransferForm() {
                 className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 text-sm focus:outline-none focus:border-amber-500 disabled:opacity-50">
                 <option value="">Select…</option>
                 {destBatches.map(b => (
-                  <option key={b.id} value={b.id}>{b.school.name} ({b.week_start})</option>
+                  <option key={b.id} value={b.id}>{b.school.name} – {b.kiosk_label ?? 'Main'} ({b.week_start})</option>
                 ))}
               </select>
             </div>
@@ -130,9 +131,9 @@ function NewTransferForm() {
           {/* Arrow indicator */}
           {fromBatch && toBatch && (
             <div className="flex items-center justify-center gap-3 py-1">
-              <span className="text-xs font-medium text-gray-600">{batches.find(b => b.id === fromBatch)?.school.name}</span>
+              {(() => { const f = batches.find(b => b.id === fromBatch); return <span className="text-xs font-medium text-gray-600">{f?.school.name} – {f?.kiosk_label ?? 'Main'}</span> })()}
               <ArrowRightLeft size={14} className="text-amber-500" />
-              <span className="text-xs font-medium text-gray-600">{batches.find(b => b.id === toBatch)?.school.name}</span>
+              {(() => { const t = batches.find(b => b.id === toBatch); return <span className="text-xs font-medium text-gray-600">{t?.school.name} – {t?.kiosk_label ?? 'Main'}</span> })()}
             </div>
           )}
 

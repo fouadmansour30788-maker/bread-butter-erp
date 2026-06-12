@@ -15,6 +15,7 @@ export default function NewBatchPage() {
   const [schools, setSchools] = useState<{ id: string; name: string }[]>([])
   const [products, setProducts] = useState<Product[]>([])
   const [schoolId, setSchoolId] = useState('')
+  const [kioskLabel, setKioskLabel] = useState('Main')
   const [weekStart, setWeekStart] = useState(week_start)
   const weekEnd = week_end
   const [signedDriver, setSignedDriver] = useState('')
@@ -57,7 +58,7 @@ export default function NewBatchPage() {
 
     const { data: batch, error: batchErr } = await supabase
       .from('weekly_batches')
-      .insert({ school_id: schoolId, week_start: weekStart, week_end: weekEnd, delivery_signed_driver: signedDriver || null, delivery_signed_staff: signedStaff || null, delivery_date: new Date().toISOString() })
+      .insert({ school_id: schoolId, kiosk_label: kioskLabel.trim() || 'Main', week_start: weekStart, week_end: weekEnd, delivery_signed_driver: signedDriver || null, delivery_signed_staff: signedStaff || null, delivery_date: new Date().toISOString() })
       .select()
       .single()
 
@@ -90,6 +91,10 @@ export default function NewBatchPage() {
                 <option value="">Select school...</option>
                 {schools.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
               </select>
+            </div>
+            <div>
+              <label className="block text-sm text-gray-600 mb-1">Kiosk</label>
+              <input type="text" value={kioskLabel} onChange={e => setKioskLabel(e.target.value)} placeholder="e.g. Main, Kiosk 2, Ground Floor" className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 text-sm focus:outline-none focus:border-amber-500" />
             </div>
             <div>
               <label className="block text-sm text-gray-600 mb-1">Week Start</label>

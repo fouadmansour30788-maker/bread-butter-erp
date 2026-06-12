@@ -53,6 +53,7 @@ export default async function BatchesPage({ searchParams }: { searchParams: Prom
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50">
                 <th className="text-left px-5 py-3 text-gray-500 font-medium">School</th>
+                <th className="text-left px-5 py-3 text-gray-500 font-medium">Kiosk</th>
                 <th className="text-left px-5 py-3 text-gray-500 font-medium">Week</th>
                 <th className="text-center px-5 py-3 text-gray-500 font-medium">Status</th>
                 <th className="text-left px-5 py-3 text-gray-500 font-medium">Driver</th>
@@ -64,6 +65,9 @@ export default async function BatchesPage({ searchParams }: { searchParams: Prom
               {batches?.map((b) => (
                 <tr key={b.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                   <td className="px-5 py-3.5 font-medium text-gray-900">{(b.school as { name: string })?.name}</td>
+                  <td className="px-5 py-3.5">
+                    <span className="px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded text-xs font-medium">{b.kiosk_label ?? 'Main'}</span>
+                  </td>
                   <td className="px-5 py-3.5 text-gray-500">{b.week_start} → {b.week_end}</td>
                   <td className="px-5 py-3.5 text-center"><StatusBadge status={b.status} /></td>
                   <td className="px-5 py-3.5 text-gray-500">{b.delivery_signed_driver ?? '—'}</td>

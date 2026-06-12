@@ -63,7 +63,10 @@ export default async function BatchDetailPage({ params }: { params: Promise<{ id
           <ArrowLeft size={16} className="text-gray-600" />
         </Link>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">{(batch.school as { name: string })?.name}</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            {(batch.school as { name: string })?.name}
+            <span className="ml-2 text-base font-medium text-amber-600">· {batch.kiosk_label ?? 'Main'}</span>
+          </h2>
           <p className="text-gray-500 text-sm">{batch.week_start} → {batch.week_end} · <StatusText status={batch.status} /></p>
         </div>
       </div>
