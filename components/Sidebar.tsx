@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, School, Package, Truck,
-  ClipboardList, BarChart3, ShoppingBag, Receipt
+  ClipboardList, BarChart3, ShoppingBag, Receipt, ArrowRightLeft
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -14,6 +14,7 @@ const nav = [
   { href: '/products',      label: 'Products',        icon: Package },
   { href: '/batches',       label: 'Weekly Batches',  icon: Truck },
   { href: '/reconciliation',label: 'Reconciliation',  icon: ClipboardList },
+  { href: '/transfers',     label: 'Transfers',       icon: ArrowRightLeft },
   { href: '/expenses',      label: 'Expenses',        icon: Receipt },
   { href: '/reports',       label: 'P&L Reports',     icon: BarChart3 },
 ]

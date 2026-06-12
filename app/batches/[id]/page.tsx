@@ -1,8 +1,17 @@
 import { createClient } from '@/lib/supabase/server'
 import { formatLBP } from '@/lib/utils'
-import { ArrowLeft, CheckCircle } from 'lucide-react'
+import { ArrowLeft, CheckCircle, ArrowRightLeft } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+
+function fmtBoxes(qty: number, qtyPerBox: number): string {
+  if (qtyPerBox <= 1) return `${qty} units`
+  const boxes = Math.floor(qty / qtyPerBox)
+  const units = qty % qtyPerBox
+  if (boxes === 0) return `${units} units`
+  if (units === 0) return `${boxes} box${boxes !== 1 ? 'es' : ''}`
+  return `${boxes}b + ${units}`
+}
 
 export default async function BatchDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -16,11 +25,15 @@ export default async function BatchDetailPage({ params }: { params: Promise<{ id
 
   if (!batch) notFound()
 
-  const [{ data: deliveryItems }, { data: closingCounts }, { data: wasteEntries }, { data: cashCollection }] = await Promise.all([
+  const [{ data: deliveryItems }, { data: closingCounts }, { data: wasteEntries }, { data: cashCollection }, { data: transfers }] = await Promise.all([
     supabase.from('delivery_items').select('*, product:products(*)').eq('batch_id', id),
     supabase.from('closing_counts').select('*, product:products(*)').eq('batch_id', id),
     supabase.from('waste_entries').select('*, product:products(*)').eq('batch_id', id),
     supabase.from('cash_collections').select('*').eq('batch_id', id).maybeSingle(),
+    supabase.from('stock_transfers')
+      .select('*, product:products(name,qty_per_box), from_batch:weekly_batches!from_batch_id(week_start,school:schools(name)), to_batch:weekly_batches!to_batch_id(week_start,school:schools(name))')
+      .or(`from_batch_id.eq.${id},to_batch_id.eq.${id}`)
+      .order('transferred_at', { ascending: false }),
   ])
 
   const closingMap = Object.fromEntries((closingCounts ?? []).map(c => [c.product_id, c.remaining_qty]))
@@ -31,7 +44,7 @@ export default async function BatchDetailPage({ params }: { params: Promise<{ id
 
   let expectedCash = 0
   const rows = (deliveryItems ?? []).map((item) => {
-    const product = item.product as { id: string; name: string; cost_price_usd: number; selling_price_lbp: number } | null
+    const product = item.product as { id: string; name: string; qty_per_box: number; cost_price_usd: number; selling_price_lbp: number } | null
     const remaining = closingMap[item.product_id] ?? null
     const waste = wasteMap[item.product_id] ?? 0
     const sold = remaining !== null ? item.delivered_qty - remaining - waste : null
@@ -95,7 +108,14 @@ export default async function BatchDetailPage({ params }: { params: Promise<{ id
                   <td className="px-5 py-3 font-medium text-gray-900" dir="rtl">{product?.name ?? '—'}</td>
                   <td className="px-5 py-3 text-center text-gray-600">{item.delivered_qty}</td>
                   <td className="px-5 py-3 text-center">
-                    {remaining !== null ? <span className="text-gray-700">{remaining}</span> : <span className="text-gray-300">—</span>}
+                    {remaining !== null ? (
+                      <span className="text-gray-700">
+                        {remaining}
+                        {product && product.qty_per_box > 1 && (
+                          <span className="text-gray-400 text-xs ml-1">({fmtBoxes(remaining, product.qty_per_box)})</span>
+                        )}
+                      </span>
+                    ) : <span className="text-gray-300">—</span>}
                   </td>
                   <td className="px-5 py-3 text-center">
                     {waste > 0 ? <span className="text-red-500">{waste}</span> : <span className="text-gray-300">0</span>}
@@ -127,9 +147,48 @@ export default async function BatchDetailPage({ params }: { params: Promise<{ id
         </div>
       </div>
 
+      {/* Transfers */}
+      {(transfers ?? []).length > 0 && (
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+          <div className="p-5 border-b border-gray-200 flex items-center gap-2">
+            <ArrowRightLeft size={15} className="text-amber-600" />
+            <h3 className="font-semibold text-gray-900">Stock Transfers</h3>
+          </div>
+          <div className="divide-y divide-gray-100">
+            {(transfers ?? []).map((t) => {
+              const isOut = t.from_batch_id === id
+              const otherBatch = isOut
+                ? (t.to_batch as { week_start: string; school: { name: string } } | null)
+                : (t.from_batch as { week_start: string; school: { name: string } } | null)
+              const product = t.product as { name: string; qty_per_box: number } | null
+              return (
+                <div key={t.id} className="px-5 py-3 flex items-center gap-4 text-sm">
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${isOut ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
+                    {isOut ? '↑ Out' : '↓ In'}
+                  </span>
+                  <span className="font-medium text-gray-900" dir="rtl">{product?.name ?? '—'}</span>
+                  <span className="text-gray-500">
+                    {t.qty} units
+                    {product && product.qty_per_box > 1 && (
+                      <span className="text-gray-400 ml-1">({fmtBoxes(t.qty, product.qty_per_box)})</span>
+                    )}
+                  </span>
+                  <span className="text-gray-400">{isOut ? '→' : '←'} {otherBatch?.school?.name}</span>
+                  {t.notes && <span className="text-gray-400 italic">{t.notes}</span>}
+                  <span className="ml-auto text-gray-400 text-xs">{new Date(t.transferred_at).toLocaleDateString()}</span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       <div className="flex gap-3">
         <Link href={`/reconciliation/${id}`} className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-4 py-2 rounded-lg text-sm transition-colors">
           <CheckCircle size={16} /> Enter Closing Count & Cash
+        </Link>
+        <Link href={`/transfers/new?from=${id}`} className="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm transition-colors">
+          <ArrowRightLeft size={16} /> Transfer Stock
         </Link>
       </div>
     </div>

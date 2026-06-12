@@ -48,9 +48,11 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
             <tr className="border-b border-gray-200 bg-gray-50">
               <th className="text-left px-5 py-3 text-gray-500 font-medium">Product</th>
               <th className="text-left px-5 py-3 text-gray-500 font-medium">Category</th>
+              <th className="text-center px-5 py-3 text-gray-500 font-medium">Weight</th>
               <th className="text-center px-5 py-3 text-gray-500 font-medium">Qty/Box</th>
               <th className="text-right px-5 py-3 text-gray-500 font-medium">Cost (USD/unit)</th>
-              <th className="text-right px-5 py-3 text-gray-500 font-medium">Sale Price (LBP)</th>
+              <th className="text-right px-5 py-3 text-gray-500 font-medium">Sale/Unit (LBP)</th>
+              <th className="text-right px-5 py-3 text-gray-500 font-medium">Price/Box (LBP)</th>
               <th className="text-right px-5 py-3 text-gray-500 font-medium">Profit/Unit</th>
               <th className="text-center px-5 py-3 text-gray-500 font-medium">Status</th>
               <th className="px-5 py-3" />
@@ -58,18 +60,21 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
           </thead>
           <tbody>
             {products?.map((p) => {
-              const costLbp = p.cost_price_usd * 90000
+              const costLbp   = p.cost_price_usd * 90000
               const profitLbp = p.selling_price_lbp - costLbp
-              const margin = ((profitLbp / p.selling_price_lbp) * 100).toFixed(0)
+              const margin    = ((profitLbp / p.selling_price_lbp) * 100).toFixed(0)
+              const priceBox  = p.selling_price_lbp * p.qty_per_box
               return (
                 <tr key={p.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                   <td className="px-5 py-3.5 font-medium text-gray-900" dir="rtl">{p.name}</td>
                   <td className="px-5 py-3.5">
                     <span className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">{p.category}</span>
                   </td>
+                  <td className="px-5 py-3.5 text-center text-gray-500 text-xs">{p.weight ?? '—'}</td>
                   <td className="px-5 py-3.5 text-center text-gray-700">{p.qty_per_box}</td>
                   <td className="px-5 py-3.5 text-right text-gray-700">{formatUSD(p.cost_price_usd)}</td>
                   <td className="px-5 py-3.5 text-right text-gray-700">{formatLBP(p.selling_price_lbp)}</td>
+                  <td className="px-5 py-3.5 text-right font-medium text-amber-700">{formatLBP(priceBox)}</td>
                   <td className="px-5 py-3.5 text-right">
                     <span className="text-green-600 font-medium">{formatLBP(Math.round(profitLbp))}</span>
                     <span className="text-gray-400 text-xs ml-1">({margin}%)</span>

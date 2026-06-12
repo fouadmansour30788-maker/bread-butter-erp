@@ -12,6 +12,7 @@ export type Product = {
   id: string
   name: string
   category: string | null
+  weight: string | null
   qty_per_box: number
   cost_price_usd: number   // cost per unit in USD
   selling_price_lbp: number // selling price per unit in LBP
@@ -93,6 +94,19 @@ export type Expense = {
   week_start: string
   created_at: string
   schools?: { name: string } | null
+}
+
+export type StockTransfer = {
+  id: string
+  from_batch_id: string
+  to_batch_id: string
+  product_id: string
+  qty: number
+  notes: string | null
+  transferred_at: string
+  product?: { name: string; qty_per_box: number }
+  from_batch?: { school: { name: string }; week_start: string }
+  to_batch?: { school: { name: string }; week_start: string }
 }
 
 export type ReconciliationSummary = {

@@ -12,6 +12,7 @@ export default function NewProductPage() {
   const router = useRouter()
   const [name, setName] = useState('')
   const [category, setCategory] = useState('Snacks')
+  const [weight, setWeight] = useState('')
   const [qtyPerBox, setQtyPerBox] = useState('')
   const [costUsd, setCostUsd] = useState('')
   const [saleLbp, setSaleLbp] = useState('')
@@ -28,6 +29,7 @@ export default function NewProductPage() {
     const { error: err } = await supabase.from('products').insert({
       name: name.trim(),
       category,
+      weight: weight.trim() || null,
       qty_per_box: Number(qtyPerBox),
       cost_price_usd: Number(costUsd),
       selling_price_lbp: Number(saleLbp),
@@ -66,9 +68,15 @@ export default function NewProductPage() {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Qty per Box <span className="text-red-500">*</span></label>
-            <input type="number" min="1" value={qtyPerBox} onChange={e => setQtyPerBox(e.target.value)} placeholder="e.g. 24" className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Weight <span className="text-gray-400 font-normal">(optional)</span></label>
+              <input type="text" value={weight} onChange={e => setWeight(e.target.value)} placeholder="e.g. 45g, 330ml" className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Qty per Box <span className="text-red-500">*</span></label>
+              <input type="number" min="1" value={qtyPerBox} onChange={e => setQtyPerBox(e.target.value)} placeholder="e.g. 24" className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500" />
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
