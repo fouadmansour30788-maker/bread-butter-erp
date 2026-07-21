@@ -12,11 +12,11 @@ export function Hero() {
     <ParallaxSection
       image={marketingImages.hero}
       speed={0.25}
-      className="min-h-screen flex items-center"
+      className="min-h-screen flex flex-col justify-center"
       overlay={`linear-gradient(160deg, rgba(15,35,23,0.96) 0%, rgba(18,42,28,0.94) 55%, ${colors.cream} 100%)`}
     >
       <div id="top" className="max-w-6xl mx-auto px-5 sm:px-8 pt-32 pb-24 w-full">
-        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 items-start">
+        <div className="grid lg:grid-cols-[1fr_1.15fr] gap-14 items-start">
           <div>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
