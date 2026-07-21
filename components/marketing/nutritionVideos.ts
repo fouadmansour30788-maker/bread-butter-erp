@@ -17,9 +17,4 @@ export const nutritionVideos = [
     title: 'Eat the Rainbow — a nutrition lesson for kids',
     channel: 'Physicians Committee',
   },
-  {
-    id: '31F0laJjyy8',
-    title: 'Why do we drink water? Staying hydrated',
-    channel: 'Peekaboo Kidz',
-  },
 ] as const

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { VideoCard } from './VideoCard'
+import { NativeVideoCard } from './NativeVideoCard'
 import { nutritionVideos } from './nutritionVideos'
 import { colors } from './theme'
 
@@ -22,14 +23,27 @@ export function NutritionTips() {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 items-start">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.5 }}
+          >
+            <NativeVideoCard
+              src="/videos/hydration-reminder.mp4"
+              title="Don't forget to drink"
+              tag="From Bread & Butter"
+            />
+          </motion.div>
+
           {nutritionVideos.map((video, i) => (
             <motion.div
               key={video.id}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
+              transition={{ duration: 0.5, delay: (i + 1) * 0.08 }}
             >
               <VideoCard {...video} />
             </motion.div>

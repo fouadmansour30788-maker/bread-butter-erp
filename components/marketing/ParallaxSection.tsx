@@ -11,13 +11,15 @@ import { cn } from '@/lib/utils'
  */
 export function ParallaxSection({
   image,
+  video,
   overlay = 'linear-gradient(180deg, rgba(18,42,28,0.55), rgba(18,42,28,0.75))',
   speed = 0.3,
   className,
   contentClassName,
   children,
 }: {
-  image: string
+  image?: string
+  video?: string
   overlay?: string
   speed?: number
   className?: string
@@ -35,10 +37,23 @@ export function ParallaxSection({
         className="absolute inset-0 -z-10"
         style={{ y, scale: 1 + speed }}
       >
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${image})` }}
-        />
+        {video ? (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster={image}
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source src={video} type="video/mp4" />
+          </video>
+        ) : (
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${image})` }}
+          />
+        )}
         <div className="absolute inset-0" style={{ background: overlay }} />
       </motion.div>
       <div className={cn('relative z-10', contentClassName)}>{children}</div>

@@ -10,6 +10,7 @@ export function Hero() {
   return (
     <ParallaxSection
       image={marketingImages.hero}
+      video="/videos/hero-brand.mp4"
       speed={0.25}
       className="min-h-screen flex items-center"
       overlay={`linear-gradient(180deg, rgba(18,42,28,0.72), rgba(18,42,28,0.5) 45%, ${colors.cream} 100%)`}
