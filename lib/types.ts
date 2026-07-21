@@ -110,6 +110,10 @@ export type StockTransfer = {
 }
 
 export type ApplicationStatus = 'new' | 'contacted' | 'onboarded' | 'rejected'
+export type SchoolType = 'kindergarten' | 'primary' | 'secondary' | 'mixed'
+export type DeliveryFrequency = 'daily' | 'few_times_week' | 'events_only'
+export type ReferralSource = 'referral' | 'social_media' | 'search' | 'other'
+export type ServiceInterest = 'brunch_box' | 'bakery_menu' | 'catering'
 
 export type SchoolApplication = {
   id: string
@@ -118,8 +122,14 @@ export type SchoolApplication = {
   phone: string
   email: string
   location: string | null
+  school_type: SchoolType | null
   student_count: number | null
+  services_interested: ServiceInterest[]
+  delivery_frequency: DeliveryFrequency | null
+  preferred_start_date: string | null
   current_provider: string | null
+  dietary_considerations: string | null
+  referral_source: ReferralSource | null
   message: string | null
   status: ApplicationStatus
   created_at: string
