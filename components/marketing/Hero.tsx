@@ -13,10 +13,10 @@ export function Hero() {
       image={marketingImages.hero}
       speed={0.25}
       className="min-h-screen flex items-center"
-      overlay={`linear-gradient(180deg, rgba(18,42,28,0.72), rgba(18,42,28,0.5) 45%, ${colors.cream} 100%)`}
+      overlay={`linear-gradient(160deg, rgba(15,35,23,0.96) 0%, rgba(18,42,28,0.94) 55%, ${colors.cream} 100%)`}
     >
       <div id="top" className="max-w-6xl mx-auto px-5 sm:px-8 pt-32 pb-24 w-full">
-        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 items-center">
+        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-14 items-start">
           <div>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
@@ -91,7 +91,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.3 }}
-            className="relative"
+            className="relative mb-8 lg:mt-6"
           >
             <TiltCard maxTilt={9}>
               <div
