@@ -1,20 +1,20 @@
 import type { Metadata } from 'next'
+import { Fraunces, Inter } from 'next/font/google'
 import './globals.css'
-import { Sidebar } from '@/components/Sidebar'
+
+const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-display', weight: ['500', '600', '700'] })
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
-  title: 'Bread & Butter ERP',
-  description: 'Kiosk Management System for North Lebanon Schools',
+  title: 'Bread & Butter — Smart Bites for Bright Minds',
+  description: 'Wholesome bakery cafeteria and catering for North Lebanon schools — brunch boxes, healthy menus, and school event catering.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" style={{ colorScheme: 'light', background: '#f8fafc' }}>
-      <body className="min-h-screen flex text-gray-900" style={{ background: '#f8fafc' }}>
-        <Sidebar />
-        <main className="flex-1 overflow-auto" style={{ background: '#f8fafc' }}>
-          {children}
-        </main>
+    <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
+      <body className="text-gray-900 antialiased">
+        {children}
       </body>
     </html>
   )

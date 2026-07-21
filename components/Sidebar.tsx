@@ -4,19 +4,20 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, School, Package, Truck,
-  ClipboardList, BarChart3, ShoppingBag, Receipt, ArrowRightLeft
+  ClipboardList, BarChart3, ShoppingBag, Receipt, ArrowRightLeft, Inbox
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const nav = [
-  { href: '/',              label: 'Dashboard',      icon: LayoutDashboard },
-  { href: '/schools',       label: 'Schools',         icon: School },
-  { href: '/products',      label: 'Products',        icon: Package },
-  { href: '/batches',       label: 'Weekly Batches',  icon: Truck },
-  { href: '/reconciliation',label: 'Reconciliation',  icon: ClipboardList },
-  { href: '/transfers',     label: 'Transfers',       icon: ArrowRightLeft },
-  { href: '/expenses',      label: 'Expenses',        icon: Receipt },
-  { href: '/reports',       label: 'P&L Reports',     icon: BarChart3 },
+  { href: '/admin',              label: 'Dashboard',      icon: LayoutDashboard },
+  { href: '/admin/schools',       label: 'Schools',         icon: School },
+  { href: '/admin/products',      label: 'Products',        icon: Package },
+  { href: '/admin/batches',       label: 'Weekly Batches',  icon: Truck },
+  { href: '/admin/reconciliation',label: 'Reconciliation',  icon: ClipboardList },
+  { href: '/admin/transfers',     label: 'Transfers',       icon: ArrowRightLeft },
+  { href: '/admin/expenses',      label: 'Expenses',        icon: Receipt },
+  { href: '/admin/applications',  label: 'Applications',    icon: Inbox },
+  { href: '/admin/reports',       label: 'P&L Reports',     icon: BarChart3 },
 ]
 
 export function Sidebar() {

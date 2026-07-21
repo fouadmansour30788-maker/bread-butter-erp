@@ -109,6 +109,22 @@ export type StockTransfer = {
   to_batch?: { school: { name: string }; week_start: string }
 }
 
+export type ApplicationStatus = 'new' | 'contacted' | 'onboarded' | 'rejected'
+
+export type SchoolApplication = {
+  id: string
+  school_name: string
+  contact_name: string
+  phone: string
+  email: string
+  location: string | null
+  student_count: number | null
+  current_provider: string | null
+  message: string | null
+  status: ApplicationStatus
+  created_at: string
+}
+
 export type ReconciliationSummary = {
   batch_id: string
   school_id: string

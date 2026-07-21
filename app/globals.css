@@ -1,26 +1,30 @@
 @import "tailwindcss";
 
-/* Force light mode regardless of system preference */
+@theme {
+  --font-display: var(--font-display), Georgia, serif;
+  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
+}
+
+/* Force light mode regardless of system preference (admin/ERP is light-only;
+   the marketing homepage sets its own section backgrounds so this base
+   doesn't fight with it) */
 :root {
   color-scheme: light;
 }
 
 html {
   color-scheme: light;
-  background: #f8fafc;
 }
 
 body {
-  background: #f8fafc !important;
-  color: #0f172a !important;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
 }
 
-/* Override any dark mode Tailwind utilities */
+/* Override any dark mode Tailwind utilities on the admin/ERP surfaces */
 @media (prefers-color-scheme: dark) {
   html, body {
-    background: #f8fafc !important;
-    color: #0f172a !important;
+    background: #f8fafc;
+    color: #0f172a;
   }
 }
 
