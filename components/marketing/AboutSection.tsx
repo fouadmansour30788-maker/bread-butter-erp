@@ -31,7 +31,9 @@ export function AboutSection() {
           className="relative rounded-[2rem] overflow-hidden aspect-[4/5]"
           style={{ boxShadow: '0 30px 60px -20px rgba(18,42,28,0.35)' }}
         >
-          <img src={marketingImages.about} alt="A student holding fresh bread" className="w-full h-full object-cover" />
+          <video autoPlay muted loop playsInline poster={marketingImages.about} className="w-full h-full object-cover">
+            <source src="/videos/hydration-reminder.mp4" type="video/mp4" />
+          </video>
           <div className="absolute inset-x-0 bottom-0 p-6" style={{ background: 'linear-gradient(180deg, transparent, rgba(18,42,28,0.75))' }}>
             <p className="text-white font-display text-lg">Recipe for Success</p>
             <p className="text-white/80 text-sm mt-1">Fresh, hygienic, and made with care every single day.</p>
