@@ -6,6 +6,7 @@ import { Target, Sparkles } from 'lucide-react'
 import { TiltCard, TiltLayer } from './TiltCard'
 import { ParallaxMedia } from './ParallaxMedia'
 import { WaterDrops } from './WaterDrops'
+import { WaterFlow } from './WaterFlow'
 import { marketingImages } from './images'
 import { colors } from './theme'
 
@@ -42,6 +43,7 @@ export function AboutSection() {
               <source src="/videos/hydration-reminder.mp4" type="video/mp4" />
             </video>
           </ParallaxMedia>
+          <WaterFlow containerRef={videoRef} />
           <WaterDrops containerRef={videoRef} />
           <div className="absolute inset-x-0 bottom-0 p-6" style={{ background: 'linear-gradient(180deg, transparent, rgba(18,42,28,0.75))' }}>
             <p className="text-white font-display text-lg">Recipe for Success</p>
