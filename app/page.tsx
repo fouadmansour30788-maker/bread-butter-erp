@@ -5,6 +5,7 @@ import { HealthImpactSection } from '@/components/marketing/HealthImpactSection'
 import { NutritionTips } from '@/components/marketing/NutritionTips'
 import { MenuShowcase } from '@/components/marketing/MenuShowcase'
 import { CateringSection } from '@/components/marketing/CateringSection'
+import { RoadmapSection } from '@/components/marketing/RoadmapSection'
 import { SchoolApplicationSection } from '@/components/marketing/SchoolApplicationSection'
 import { Footer } from '@/components/marketing/Footer'
 
@@ -18,6 +19,7 @@ export default function HomePage() {
       <NutritionTips />
       <MenuShowcase />
       <CateringSection />
+      <RoadmapSection />
       <SchoolApplicationSection />
       <Footer />
     </>

@@ -10,6 +10,7 @@ const links = [
   { href: '#tips', label: 'Nutrition Tips' },
   { href: '#menu', label: 'Menu' },
   { href: '#catering', label: 'Catering' },
+  { href: '#roadmap', label: 'Roadmap' },
 ]
 
 export function MarketingNav() {
