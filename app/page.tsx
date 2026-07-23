@@ -1,4 +1,5 @@
 import { ScrollProgress } from '@/components/marketing/ScrollProgress'
+import { PageWaterFlow } from '@/components/marketing/PageWaterFlow'
 import { MarketingNav } from '@/components/marketing/MarketingNav'
 import { Hero } from '@/components/marketing/Hero'
 import { AboutSection } from '@/components/marketing/AboutSection'
@@ -18,6 +19,7 @@ export default function HomePage() {
   return (
     <>
       <ScrollProgress />
+      <PageWaterFlow />
       <MarketingNav />
       <Hero />
       <AboutSection />

@@ -1,12 +1,9 @@
 'use client'
 
-import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Target, Sparkles } from 'lucide-react'
 import { TiltCard, TiltLayer } from './TiltCard'
 import { ParallaxMedia } from './ParallaxMedia'
-import { WaterDrops } from './WaterDrops'
-import { WaterFlow } from './WaterFlow'
 import { marketingImages } from './images'
 import { colors } from './theme'
 
@@ -24,13 +21,10 @@ const cards = [
 ]
 
 export function AboutSection() {
-  const videoRef = useRef<HTMLDivElement>(null)
-
   return (
     <section id="about" className="py-24 sm:py-32" style={{ background: colors.cream }}>
       <div className="max-w-6xl mx-auto px-5 sm:px-8 grid lg:grid-cols-2 gap-14 items-center">
         <motion.div
-          ref={videoRef}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
@@ -43,8 +37,6 @@ export function AboutSection() {
               <source src="/videos/hydration-reminder.mp4" type="video/mp4" />
             </video>
           </ParallaxMedia>
-          <WaterFlow containerRef={videoRef} />
-          <WaterDrops containerRef={videoRef} />
           <div className="absolute inset-x-0 bottom-0 p-6" style={{ background: 'linear-gradient(180deg, transparent, rgba(18,42,28,0.75))' }}>
             <p className="text-white font-display text-lg">Recipe for Success</p>
             <p className="text-white/80 text-sm mt-1">Fresh, hygienic, and made with care every single day.</p>
