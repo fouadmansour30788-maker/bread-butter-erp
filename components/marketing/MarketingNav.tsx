@@ -11,6 +11,7 @@ const links = [
   { href: '#menu', label: 'Menu' },
   { href: '#catering', label: 'Catering' },
   { href: '#roadmap', label: 'Roadmap' },
+  { href: '#faq', label: 'FAQ' },
 ]
 
 export function MarketingNav() {
