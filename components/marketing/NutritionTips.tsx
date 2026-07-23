@@ -7,8 +7,10 @@ import { colors } from './theme'
 
 export function NutritionTips() {
   return (
-    <section id="tips" className="py-24 sm:py-32" style={{ background: colors.creamDeep }}>
-      <div className="max-w-6xl mx-auto px-5 sm:px-8">
+    <section id="tips" className="relative overflow-hidden py-24 sm:py-32" style={{ background: colors.creamDeep }}>
+      <div aria-hidden className="absolute -top-16 -right-20 w-80 h-80 rounded-full blur-3xl opacity-20 pointer-events-none" style={{ background: colors.sage }} />
+      <div aria-hidden className="absolute bottom-0 -left-24 w-64 h-64 rounded-full blur-3xl opacity-15 pointer-events-none" style={{ background: colors.gold }} />
+      <div className="relative max-w-6xl mx-auto px-5 sm:px-8">
         <div className="max-w-2xl mb-14">
           <p className="uppercase tracking-[0.2em] text-xs font-semibold mb-3" style={{ color: colors.goldDark }}>
             For parents &amp; schools

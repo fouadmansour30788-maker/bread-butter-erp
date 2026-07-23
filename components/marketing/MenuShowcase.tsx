@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { TiltCard, TiltLayer } from './TiltCard'
+import { ParallaxMedia } from './ParallaxMedia'
 import { marketingImages } from './images'
 import { colors } from './theme'
 
@@ -54,9 +55,9 @@ export function MenuShowcase() {
                   className="h-full rounded-3xl overflow-hidden"
                   style={{ background: 'white', boxShadow: '0 20px 45px -20px rgba(18,42,28,0.35)' }}
                 >
-                  <div className="aspect-[4/3] overflow-hidden">
+                  <ParallaxMedia className="aspect-[4/3]">
                     <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                  </div>
+                  </ParallaxMedia>
                   <TiltLayer z={20} className="p-6">
                     <p className="font-display text-lg mb-2" style={{ color: colors.forestDeep }}>{item.title}</p>
                     <p className="text-sm leading-relaxed" style={{ color: colors.inkSoft }}>{item.copy}</p>

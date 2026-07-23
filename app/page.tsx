@@ -1,3 +1,4 @@
+import { ScrollProgress } from '@/components/marketing/ScrollProgress'
 import { MarketingNav } from '@/components/marketing/MarketingNav'
 import { Hero } from '@/components/marketing/Hero'
 import { AboutSection } from '@/components/marketing/AboutSection'
@@ -16,6 +17,7 @@ import { Footer } from '@/components/marketing/Footer'
 export default function HomePage() {
   return (
     <>
+      <ScrollProgress />
       <MarketingNav />
       <Hero />
       <AboutSection />

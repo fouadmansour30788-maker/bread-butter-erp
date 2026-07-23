@@ -40,8 +40,9 @@ export function FAQSection() {
   const [open, setOpen] = useState<number | null>(0)
 
   return (
-    <section id="faq" className="py-24 sm:py-32" style={{ background: colors.cream }}>
-      <div className="max-w-4xl mx-auto px-5 sm:px-8">
+    <section id="faq" className="relative overflow-hidden py-24 sm:py-32" style={{ background: colors.cream }}>
+      <div aria-hidden className="absolute top-1/3 -right-24 w-72 h-72 rounded-full blur-3xl opacity-[0.12] pointer-events-none" style={{ background: colors.forestMid }} />
+      <div className="relative max-w-4xl mx-auto px-5 sm:px-8">
         <div className="max-w-2xl mb-14">
           <p className="uppercase tracking-[0.2em] text-xs font-semibold mb-3" style={{ color: colors.goldDark }}>
             Common questions
