@@ -10,43 +10,56 @@ const pillars = [
     icon: CreditCard,
     title: 'Digital payments & order tracking',
     copy: 'Parents top up an account and see exactly what their child orders, in real time — no cash lost in backpacks.',
+    accent: 'gold',
   },
   {
     icon: Network,
     title: 'The Bread & Butter ecosystem',
     copy: 'One connected platform linking schools, parents, and students — ordering, communication, and wellbeing in a single place.',
+    accent: 'sage',
   },
   {
     icon: BookOpen,
     title: 'A growing nutrition education hub',
     copy: 'Turning our health tips into a full library of guidance for parents, teachers, and students.',
+    accent: 'gold',
   },
   {
     icon: Trophy,
     title: 'Healthy eating competitions',
     copy: 'Friendly leaderboards between classes and between schools that reward balanced choices, not just participation.',
+    accent: 'sage',
   },
   {
     icon: ShieldCheck,
     title: 'Allergy & safety profiles',
     copy: 'Parents register allergies once; the system flags conflicting orders automatically, before food ever reaches a tray.',
+    accent: 'gold',
   },
   {
     icon: Gift,
     title: 'Rewards for healthy choices',
     copy: 'Points for choosing fruit over candy, redeemable for future meals — turning good habits into a game.',
+    accent: 'sage',
   },
   {
     icon: Recycle,
     title: 'Smarter, lower-waste kitchens',
     copy: 'Real order data helps us plan production per school precisely, cutting food waste without cutting portions.',
+    accent: 'gold',
   },
   {
     icon: Sprout,
     title: 'Local & transparent sourcing',
     copy: 'Showing parents where ingredients come from, so "wholesome" is something they can verify, not just read.',
+    accent: 'sage',
   },
-]
+] as const
+
+const accents = {
+  gold: { chip: 'rgba(227,166,47,0.18)', icon: colors.gold, ghost: colors.gold, number: colors.gold },
+  sage: { chip: 'rgba(156,187,164,0.18)', icon: colors.sage, ghost: colors.sage, number: colors.sage },
+}
 
 export function RoadmapSection() {
   return (
@@ -67,33 +80,52 @@ export function RoadmapSection() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {pillars.map((p, i) => (
-            <motion.div
-              key={p.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.5, delay: (i % 4) * 0.08 }}
-            >
-              <TiltCard maxTilt={7}>
-                <div
-                  className="h-full rounded-3xl p-6"
-                  style={{ background: colors.forestDeep, boxShadow: '0 20px 40px -16px rgba(18,42,28,0.45)' }}
-                >
-                  <TiltLayer z={30}>
-                    <span
-                      className="inline-flex items-center justify-center w-11 h-11 rounded-2xl mb-4"
-                      style={{ background: 'rgba(227,166,47,0.15)' }}
-                    >
-                      <p.icon size={20} color={colors.gold} />
-                    </span>
-                    <p className="font-display text-lg text-white mb-2 leading-snug">{p.title}</p>
-                    <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>{p.copy}</p>
-                  </TiltLayer>
-                </div>
-              </TiltCard>
-            </motion.div>
-          ))}
+          {pillars.map((p, i) => {
+            const a = accents[p.accent as keyof typeof accents]
+            return (
+              <motion.div
+                key={p.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.5, delay: (i % 4) * 0.08 }}
+              >
+                <TiltCard maxTilt={7}>
+                  <div
+                    className="relative h-full rounded-3xl p-6 overflow-hidden"
+                    style={{ background: colors.forestDeep, boxShadow: '0 20px 40px -16px rgba(18,42,28,0.45)' }}
+                  >
+                    {/* oversized ghost icon, flat (no translateZ) so it stays behind the raised content */}
+                    <p.icon
+                      size={112}
+                      color={a.ghost}
+                      strokeWidth={1}
+                      className="absolute -bottom-6 -right-6 opacity-[0.14] rotate-[-8deg] pointer-events-none"
+                    />
+
+                    <TiltLayer z={30} className="relative flex flex-col h-full">
+                      <div className="flex items-start justify-between mb-4">
+                        <span
+                          className="inline-flex items-center justify-center w-11 h-11 rounded-2xl shrink-0"
+                          style={{ background: a.chip }}
+                        >
+                          <p.icon size={20} color={a.icon} />
+                        </span>
+                        <span
+                          className="font-display text-2xl leading-none"
+                          style={{ color: a.number, opacity: 0.5 }}
+                        >
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                      </div>
+                      <p className="font-display text-lg text-white mb-2 leading-snug">{p.title}</p>
+                      <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>{p.copy}</p>
+                    </TiltLayer>
+                  </div>
+                </TiltCard>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>
