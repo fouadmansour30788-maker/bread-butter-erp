@@ -2,13 +2,14 @@
 
 import { motion } from 'framer-motion'
 import { MapPin, School } from 'lucide-react'
+import { CountUp } from './CountUp'
 import { colors } from './theme'
 
-const stats = [
-  { value: '5', label: 'Partner school kiosks' },
+const stats: { value: React.ReactNode; label: string }[] = [
+  { value: <CountUp to={5} />, label: 'Partner school kiosks' },
   { value: 'North Lebanon', label: 'Tripoli area focus' },
   { value: 'Weekly', label: 'Delivery cycle' },
-  { value: '49+', label: 'Menu items across our range' },
+  { value: <CountUp to={49} suffix="+" />, label: 'Menu items across our range' },
 ]
 
 // Illustrative pin cluster — not a literal, geolocated map.

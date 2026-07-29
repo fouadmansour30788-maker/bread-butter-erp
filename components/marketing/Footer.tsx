@@ -1,6 +1,7 @@
-import { Wheat, Phone, Mail, Globe } from 'lucide-react'
+import { Phone, Mail, Globe } from 'lucide-react'
 import { colors } from './theme'
 import { FacebookIcon, InstagramIcon } from './icons'
+import { Mascot } from './Mascot'
 
 export function Footer() {
   return (
@@ -8,12 +9,7 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-5 sm:px-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8 pb-10" style={{ borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
           <div className="flex items-center gap-3">
-            <span
-              className="flex items-center justify-center w-10 h-10 rounded-full shrink-0"
-              style={{ background: `linear-gradient(135deg, ${colors.forestMid}, ${colors.forest})` }}
-            >
-              <Wheat size={18} color={colors.gold} />
-            </span>
+            <Mascot size={40} className="shrink-0" />
             <div>
               <p className="font-display text-lg text-white leading-none">Bread &amp; Butter</p>
               <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.55)' }}>Smart bites for bright minds</p>

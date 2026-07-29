@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowDown, Wheat } from 'lucide-react'
 import { ParallaxSection } from './ParallaxSection'
 import { TiltCard, TiltLayer } from './TiltCard'
+import { Mascot } from './Mascot'
 import { marketingImages } from './images'
 import { colors } from './theme'
 
@@ -102,6 +103,12 @@ export function Hero() {
                   <source src="/videos/hero-brand.mp4" type="video/mp4" />
                 </video>
               </div>
+
+              <TiltLayer z={50} className="absolute -top-6 -right-4">
+                <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}>
+                  <Mascot size={52} />
+                </motion.div>
+              </TiltLayer>
 
               <TiltLayer z={45} className="absolute -bottom-5 -left-5">
                 <div

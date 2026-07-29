@@ -1,8 +1,10 @@
 'use client'
 
 import { useActionState } from 'react'
-import { CheckCircle2, AlertCircle } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
 import { submitSchoolApplication, type ApplyFormState } from '@/app/apply-action'
+import { ConfettiBurst } from './ConfettiBurst'
+import { Mascot } from './Mascot'
 import { colors } from './theme'
 
 const initialState: ApplyFormState = { success: false }
@@ -42,10 +44,11 @@ export function SchoolApplicationForm() {
   if (state.success) {
     return (
       <div
-        className="rounded-3xl p-10 text-center"
+        className="relative overflow-hidden rounded-3xl p-10 text-center"
         style={{ background: 'white', border: `1px solid ${colors.sageLight}` }}
       >
-        <CheckCircle2 size={40} color={colors.forest} className="mx-auto mb-4" />
+        <ConfettiBurst />
+        <Mascot size={56} className="mx-auto mb-4" />
         <p className="font-display text-xl mb-2" style={{ color: colors.forestDeep }}>Thank you!</p>
         <p className="text-sm" style={{ color: colors.inkSoft }}>
           We&apos;ve received your school&apos;s application. Our team will reach out shortly to discuss next steps.
