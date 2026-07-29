@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Wheat, Menu, X } from 'lucide-react'
+import { Magnetic } from './Magnetic'
 import { colors } from './theme'
 
 const links = [
@@ -61,13 +62,15 @@ export function MarketingNav() {
               {l.label}
             </a>
           ))}
-          <a
-            href="#apply"
-            className="text-sm font-semibold px-4 py-2 rounded-full transition-transform hover:scale-105"
-            style={{ background: colors.gold, color: colors.forestDeep }}
-          >
-            Apply Your School
-          </a>
+          <Magnetic strength={0.25}>
+            <a
+              href="#apply"
+              className="inline-block text-sm font-semibold px-4 py-2 rounded-full transition-transform hover:scale-105"
+              style={{ background: colors.gold, color: colors.forestDeep }}
+            >
+              Apply Your School
+            </a>
+          </Magnetic>
         </div>
 
         <button

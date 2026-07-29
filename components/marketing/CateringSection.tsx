@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { PartyPopper } from 'lucide-react'
 import { ParallaxSection } from './ParallaxSection'
+import { Magnetic } from './Magnetic'
 import { marketingImages } from './images'
 import { colors } from './theme'
 
@@ -44,17 +45,22 @@ export function CateringSection() {
         >
           &ldquo;Delicious support for every event&rdquo;
         </motion.p>
-        <motion.a
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          href="#apply"
-          className="inline-block px-7 py-3.5 rounded-full font-semibold text-sm transition-transform hover:scale-105"
-          style={{ background: colors.gold, color: colors.forestDeep, boxShadow: '0 10px 28px rgba(227,166,47,0.35)' }}
         >
-          Enquire About Catering
-        </motion.a>
+          <Magnetic>
+            <a
+              href="#apply"
+              className="inline-block px-7 py-3.5 rounded-full font-semibold text-sm transition-transform hover:scale-105"
+              style={{ background: colors.gold, color: colors.forestDeep, boxShadow: '0 10px 28px rgba(227,166,47,0.35)' }}
+            >
+              Enquire About Catering
+            </a>
+          </Magnetic>
+        </motion.div>
       </div>
     </ParallaxSection>
   )

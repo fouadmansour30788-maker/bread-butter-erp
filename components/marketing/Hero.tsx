@@ -5,6 +5,9 @@ import { ArrowDown, Wheat } from 'lucide-react'
 import { ParallaxSection } from './ParallaxSection'
 import { TiltCard, TiltLayer } from './TiltCard'
 import { Mascot } from './Mascot'
+import { Magnetic } from './Magnetic'
+import { SplitText } from './SplitText'
+import { HeroParticles } from './HeroParticles'
 import { marketingImages } from './images'
 import { colors } from './theme'
 
@@ -16,6 +19,13 @@ export function Hero() {
       className="min-h-screen flex flex-col justify-center"
       overlay={`linear-gradient(160deg, rgba(15,35,23,0.96) 0%, rgba(18,42,28,0.94) 55%, ${colors.cream} 100%)`}
     >
+      {/* Explicit h-screen (viewport unit) rather than h-full/inset-0 — the
+          content wrapper's own height is "auto" (min-h-screen on the
+          section doesn't make it a definite %-resolvable height), so a
+          percentage-based absolute fill wouldn't reliably cover the hero. */}
+      <div className="absolute inset-x-0 top-0 h-screen pointer-events-none">
+        <HeroParticles />
+      </div>
       <div id="top" className="max-w-6xl mx-auto px-5 sm:px-8 pt-32 pb-24 w-full">
         <div className="grid lg:grid-cols-[1fr_1.15fr] gap-14 items-start">
           <div>
@@ -28,14 +38,9 @@ export function Hero() {
             >
               Bakery cafeteria &amp; catering for schools
             </motion.p>
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="font-display font-semibold text-white leading-[1.05] text-4xl sm:text-6xl lg:text-6xl"
-            >
-              Smart bites for bright minds
-            </motion.h1>
+            <h1 className="font-display font-semibold text-white leading-[1.05] text-4xl sm:text-6xl lg:text-6xl">
+              <SplitText text="Smart bites for bright minds" delay={0.15} />
+            </h1>
             <motion.p
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
@@ -53,20 +58,24 @@ export function Hero() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="mt-9 flex flex-wrap gap-4"
             >
-              <a
-                href="#apply"
-                className="px-6 py-3.5 rounded-full font-semibold text-sm transition-transform hover:scale-105"
-                style={{ background: colors.gold, color: colors.forestDeep, boxShadow: '0 8px 24px rgba(227,166,47,0.35)' }}
-              >
-                Apply Your School
-              </a>
-              <a
-                href="#menu"
-                className="px-6 py-3.5 rounded-full font-semibold text-sm text-white border transition-colors hover:bg-white/10"
-                style={{ borderColor: 'rgba(255,255,255,0.4)' }}
-              >
-                See Our Menu
-              </a>
+              <Magnetic>
+                <a
+                  href="#apply"
+                  className="inline-block px-6 py-3.5 rounded-full font-semibold text-sm transition-transform hover:scale-105"
+                  style={{ background: colors.gold, color: colors.forestDeep, boxShadow: '0 8px 24px rgba(227,166,47,0.35)' }}
+                >
+                  Apply Your School
+                </a>
+              </Magnetic>
+              <Magnetic>
+                <a
+                  href="#menu"
+                  className="inline-block px-6 py-3.5 rounded-full font-semibold text-sm text-white border transition-colors hover:bg-white/10"
+                  style={{ borderColor: 'rgba(255,255,255,0.4)' }}
+                >
+                  See Our Menu
+                </a>
+              </Magnetic>
             </motion.div>
 
             <motion.a

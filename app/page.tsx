@@ -1,5 +1,9 @@
+import { SmoothScrollProvider } from '@/components/marketing/SmoothScrollProvider'
 import { ScrollProgress } from '@/components/marketing/ScrollProgress'
 import { PageWaterFlow } from '@/components/marketing/PageWaterFlow'
+import { CustomCursor } from '@/components/marketing/CustomCursor'
+import { GrainOverlay } from '@/components/marketing/GrainOverlay'
+import { Preloader } from '@/components/marketing/Preloader'
 import { MarketingNav } from '@/components/marketing/MarketingNav'
 import { Hero } from '@/components/marketing/Hero'
 import { AboutSection } from '@/components/marketing/AboutSection'
@@ -19,7 +23,10 @@ import { Footer } from '@/components/marketing/Footer'
 
 export default function HomePage() {
   return (
-    <>
+    <SmoothScrollProvider>
+      <Preloader />
+      <CustomCursor />
+      <GrainOverlay />
       <ScrollProgress />
       <PageWaterFlow />
       <MarketingNav />
@@ -38,6 +45,6 @@ export default function HomePage() {
       <SchoolApplicationSection />
       <SocialSection />
       <Footer />
-    </>
+    </SmoothScrollProvider>
   )
 }

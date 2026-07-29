@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useRef, useState } from 'react'
+import { motion, AnimatePresence, type PanInfo } from 'framer-motion'
 import { Apple, Sandwich, Carrot, Milk, RotateCcw } from 'lucide-react'
 import { colors } from './theme'
 
@@ -17,6 +17,7 @@ type Food = (typeof FOODS)[number]
 export function BrunchBoxBuilder() {
   const [slots, setSlots] = useState<(Food | null)[]>([null, null, null, null])
   const isFull = slots.every((s) => s !== null)
+  const boxRef = useRef<HTMLDivElement>(null)
 
   function addFood(food: Food) {
     setSlots((prev) => {
@@ -32,9 +33,20 @@ export function BrunchBoxBuilder() {
     setSlots([null, null, null, null])
   }
 
+  function handleDragEnd(food: Food, info: PanInfo) {
+    const box = boxRef.current
+    if (!box) return
+    const rect = box.getBoundingClientRect()
+    const { x, y } = info.point
+    if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+      addFood(food)
+    }
+  }
+
   return (
     <div className="flex flex-col items-center">
       <div
+        ref={boxRef}
         className="grid grid-cols-2 gap-3 p-5 rounded-[1.75rem] mb-8"
         style={{ background: colors.creamDeep, border: `2px solid ${colors.sageLight}` }}
       >
@@ -64,19 +76,25 @@ export function BrunchBoxBuilder() {
 
       <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
         {FOODS.map((food) => (
-          <button
+          <motion.button
             key={food.id}
             type="button"
+            drag={!isFull}
+            dragSnapToOrigin
+            dragElastic={0.15}
+            whileDrag={{ scale: 1.15, zIndex: 10 }}
+            onDragEnd={(_, info) => handleDragEnd(food, info)}
             onClick={() => addFood(food)}
             disabled={isFull}
             className="flex flex-col items-center gap-1.5 px-4 py-3 rounded-2xl transition-transform hover:scale-105 disabled:opacity-40 disabled:hover:scale-100"
-            style={{ background: 'white', border: `1px solid ${colors.sageLight}` }}
+            style={{ background: 'white', border: `1px solid ${colors.sageLight}`, touchAction: 'none' }}
           >
             <food.icon size={22} color={colors.forestDeep} />
             <span className="text-xs font-medium" style={{ color: colors.inkSoft }}>{food.label}</span>
-          </button>
+          </motion.button>
         ))}
       </div>
+      <p className="text-xs mb-6 -mt-4" style={{ color: colors.inkSoft, opacity: 0.7 }}>Click or drag into the box</p>
 
       <div className="flex flex-col items-center gap-3">
         <AnimatePresence>
