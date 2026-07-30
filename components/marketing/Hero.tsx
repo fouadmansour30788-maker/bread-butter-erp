@@ -6,6 +6,7 @@ export function Hero() {
         muted
         loop
         playsInline
+        poster="/videos/bread-butter-brand-film-poster.jpg"
         className="absolute inset-0 w-full h-full object-cover"
       >
         <source src="/videos/bread-butter-brand-film.mp4" type="video/mp4" />
