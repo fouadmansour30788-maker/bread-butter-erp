@@ -124,7 +124,7 @@ export function BrunchBoxBuilder() {
                 whileHover={!isFull ? { scale: 1.08 } : undefined}
                 whileTap={!isFull ? { scale: 0.94 } : undefined}
                 onDragEnd={(_, info) => handleDragEnd(food, info)}
-                onClick={() => addFood(food)}
+                onTap={() => addFood(food)}
                 disabled={isFull}
                 className="flex flex-col items-center gap-1.5 px-4 py-3 rounded-2xl disabled:opacity-40"
                 style={{ background: colors.creamDeep, border: `1px solid ${colors.sageLight}`, touchAction: 'none' }}
