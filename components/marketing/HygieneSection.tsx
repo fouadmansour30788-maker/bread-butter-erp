@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Thermometer, ChefHat, ClipboardCheck, ListChecks, Wheat, ShieldCheck } from 'lucide-react'
 import { TiltCard, TiltLayer } from './TiltCard'
+import { ParallaxMedia } from './ParallaxMedia'
 import { colors } from './theme'
 
 const practices = [
@@ -55,6 +56,22 @@ export function HygieneSection() {
             what shows up on the tray.
           </p>
         </div>
+
+        {/* Banner video: whole-wheat ingredient close-up -> hands-on dough prep */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6 }}
+          className="relative rounded-[1.75rem] overflow-hidden aspect-[21/9] mb-10"
+          style={{ boxShadow: '0 20px 45px -20px rgba(18,42,28,0.35)' }}
+        >
+          <ParallaxMedia className="h-full">
+            <video autoPlay muted loop playsInline poster="/videos/hygiene-ingredients-poster.jpg" className="w-full h-full object-cover">
+              <source src="/videos/hygiene-ingredients.mp4" type="video/mp4" />
+            </video>
+          </ParallaxMedia>
+        </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {practices.map((item, i) => (

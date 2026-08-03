@@ -69,7 +69,7 @@ export function MenuShowcase() {
           </p>
         </div>
 
-        {/* Banner image */}
+        {/* Banner video: real delivery van -> kiosk handoff footage */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -79,7 +79,9 @@ export function MenuShowcase() {
           style={{ boxShadow: '0 20px 45px -20px rgba(18,42,28,0.35)' }}
         >
           <ParallaxMedia className="h-full">
-            <img src={marketingImages.menuPastries} alt="Fresh bakery items" className="w-full h-full object-cover" />
+            <video autoPlay muted loop playsInline poster={marketingImages.menuPastries} className="w-full h-full object-cover">
+              <source src="/videos/menu-kiosk-serving.mp4" type="video/mp4" />
+            </video>
           </ParallaxMedia>
         </motion.div>
 

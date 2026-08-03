@@ -34,6 +34,7 @@ export function HealthImpactSection() {
   return (
     <ParallaxSection
       image={marketingImages.healthImpact}
+      video="/videos/health-nutrition-pour.mp4"
       speed={0.22}
       className="py-24 sm:py-32"
       overlay={`linear-gradient(180deg, ${colors.forestDeep}f2, ${colors.forestDeep}e6)`}
