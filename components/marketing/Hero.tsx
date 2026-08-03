@@ -6,10 +6,10 @@ export function Hero() {
         muted
         loop
         playsInline
-        poster="/videos/bread-butter-brand-film-poster.jpg"
+        poster="/videos/hero-classroom-poster.jpg"
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="/videos/bread-butter-brand-film.mp4" type="video/mp4" />
+        <source src="/videos/hero-classroom.mp4" type="video/mp4" />
       </video>
     </section>
   )

@@ -75,7 +75,7 @@ export function MenuShowcase() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6 }}
-          className="relative rounded-[1.75rem] overflow-hidden aspect-[21/9] mb-8"
+          className="relative rounded-[1.75rem] overflow-hidden aspect-video mb-8"
           style={{ boxShadow: '0 20px 45px -20px rgba(18,42,28,0.35)' }}
         >
           <ParallaxMedia className="h-full">
