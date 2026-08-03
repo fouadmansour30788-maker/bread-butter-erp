@@ -7,7 +7,7 @@ import { colors } from './theme'
 export function SchoolApplicationSection() {
   return (
     <section id="apply" className="py-24 sm:py-32" style={{ background: colors.creamDeep }}>
-      <div className="max-w-3xl mx-auto px-5 sm:px-8">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
