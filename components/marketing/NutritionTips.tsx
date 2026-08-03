@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { TiltCard, TiltLayer } from './TiltCard'
 import { VideoCard } from './VideoCard'
 import { nutritionVideos } from './nutritionVideos'
 import { colors } from './theme'
@@ -24,14 +25,38 @@ export function NutritionTips() {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.5 }}
+          >
+            <TiltCard maxTilt={6}>
+              <div
+                className="h-full rounded-3xl overflow-hidden"
+                style={{ background: 'white', border: `1px solid ${colors.sageLight}`, boxShadow: '0 16px 36px -20px rgba(18,42,28,0.3)' }}
+              >
+                <div className="aspect-video relative bg-black">
+                  <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
+                    <source src="/videos/hydration-reminder.mp4" type="video/mp4" />
+                  </video>
+                </div>
+                <TiltLayer z={20} className="p-5">
+                  <p className="font-display text-base leading-snug mb-1" style={{ color: colors.forestDeep }}>A daily reminder to hydrate</p>
+                  <p className="text-xs" style={{ color: colors.inkSoft }}>Bread &amp; Butter</p>
+                </TiltLayer>
+              </div>
+            </TiltCard>
+          </motion.div>
+
           {nutritionVideos.map((video, i) => (
             <motion.div
               key={video.id}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
+              transition={{ duration: 0.5, delay: (i + 1) * 0.08 }}
             >
               <VideoCard {...video} />
             </motion.div>

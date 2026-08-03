@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import { Target, Sparkles } from 'lucide-react'
 import { TiltCard, TiltLayer } from './TiltCard'
 import { ParallaxMedia } from './ParallaxMedia'
-import { marketingImages } from './images'
 import { colors } from './theme'
 
 const cards = [
@@ -33,8 +32,8 @@ export function AboutSection() {
           style={{ boxShadow: '0 30px 60px -20px rgba(18,42,28,0.35)' }}
         >
           <ParallaxMedia className="absolute inset-0" range={8}>
-            <video autoPlay muted loop playsInline poster={marketingImages.about} className="w-full h-full object-cover">
-              <source src="/videos/hydration-reminder.mp4" type="video/mp4" />
+            <video autoPlay muted loop playsInline poster="/videos/about-ingredients-poster.jpg" className="w-full h-full object-cover">
+              <source src="/videos/about-ingredients.mp4" type="video/mp4" />
             </video>
           </ParallaxMedia>
           <div className="absolute inset-x-0 bottom-0 p-6" style={{ background: 'linear-gradient(180deg, transparent, rgba(18,42,28,0.75))' }}>
