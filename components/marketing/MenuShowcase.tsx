@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { CheckCircle2 } from 'lucide-react'
+import { TiltCard, TiltLayer } from './TiltCard'
 import { ParallaxMedia } from './ParallaxMedia'
 import { marketingImages } from './images'
 import { colors } from './theme'
@@ -55,7 +56,7 @@ export function MenuShowcase() {
   return (
     <section id="menu" className="py-24 sm:py-32" style={{ background: colors.cream }}>
       <div className="max-w-6xl mx-auto px-5 sm:px-8">
-        <div className="max-w-2xl mb-14">
+        <div className="max-w-2xl mb-12">
           <p className="uppercase tracking-[0.2em] text-xs font-semibold mb-3" style={{ color: colors.goldDark }}>
             Because a student&apos;s health starts with their food
           </p>
@@ -68,90 +69,113 @@ export function MenuShowcase() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-[0.85fr_1.15fr] gap-10">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="rounded-[1.75rem] overflow-hidden aspect-[4/3] mb-6" style={{ boxShadow: '0 20px 45px -20px rgba(18,42,28,0.35)' }}>
-              <ParallaxMedia className="h-full">
-                <img src={marketingImages.menuPastries} alt="Fresh bakery items" className="w-full h-full object-cover" />
-              </ParallaxMedia>
-            </div>
-            <div className="rounded-3xl p-6" style={{ background: colors.forestDeep }}>
-              <p className="font-display text-lg text-white mb-4">Our commitments</p>
-              <ul className="space-y-2.5">
-                {commitments.map((c) => (
-                  <li key={c} className="flex items-start gap-2.5 text-sm" style={{ color: 'rgba(255,255,255,0.85)' }}>
-                    <CheckCircle2 size={16} color={colors.gold} className="shrink-0 mt-0.5" />
-                    {c}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
+        {/* Banner image */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6 }}
+          className="relative rounded-[1.75rem] overflow-hidden aspect-[21/9] mb-8"
+          style={{ boxShadow: '0 20px 45px -20px rgba(18,42,28,0.35)' }}
+        >
+          <ParallaxMedia className="h-full">
+            <img src={marketingImages.menuPastries} alt="Fresh bakery items" className="w-full h-full object-cover" />
+          </ParallaxMedia>
+        </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="space-y-8"
-          >
-            <div>
-              <p className="uppercase tracking-[0.15em] text-xs font-semibold mb-4" style={{ color: colors.goldDark }}>Bakery</p>
-              <div className="space-y-3">
-                {bakery.map((item) => (
-                  <div key={item.name} className="rounded-2xl p-4" style={{ background: 'white', border: `1px solid ${colors.sageLight}` }}>
-                    <p className="font-display text-base mb-1" style={{ color: colors.forestDeep }}>{item.name}</p>
+        {/* Commitments, as a compact chip row */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, delay: 0.05 }}
+          className="flex flex-wrap gap-2.5 mb-16"
+        >
+          {commitments.map((c) => (
+            <span
+              key={c}
+              className="flex items-center gap-2 pl-3 pr-4 py-2 rounded-full text-xs sm:text-sm font-medium"
+              style={{ background: colors.forestDeep, color: 'white' }}
+            >
+              <CheckCircle2 size={14} color={colors.gold} className="shrink-0" />
+              {c}
+            </span>
+          ))}
+        </motion.div>
+
+        {/* Bakery grid */}
+        <p className="uppercase tracking-[0.15em] text-xs font-semibold mb-5" style={{ color: colors.goldDark }}>
+          Bakery
+        </p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
+          {bakery.map((item, i) => (
+            <motion.div
+              key={item.name}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
+            >
+              <TiltCard maxTilt={6}>
+                <div
+                  className="h-full rounded-3xl p-6"
+                  style={{ background: 'white', border: `1px solid ${colors.sageLight}`, boxShadow: '0 12px 30px -18px rgba(18,42,28,0.2)' }}
+                >
+                  <TiltLayer z={20}>
+                    <p className="font-display text-lg mb-2" style={{ color: colors.forestDeep }}>{item.name}</p>
                     <p className="text-sm leading-relaxed" style={{ color: colors.inkSoft }}>{item.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-8">
-              <div>
-                <p className="uppercase tracking-[0.15em] text-xs font-semibold mb-4" style={{ color: colors.goldDark }}>Beverages</p>
-                <ul className="space-y-2.5">
-                  {beverages.map((b) => (
-                    <li key={b} className="text-sm leading-relaxed" style={{ color: colors.inkSoft }}>{b}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="uppercase tracking-[0.15em] text-xs font-semibold mb-4" style={{ color: colors.goldDark }}>Desserts</p>
-                <div className="space-y-3">
-                  {desserts.map((d) => (
-                    <div key={d.name}>
-                      <p className="text-sm font-semibold" style={{ color: colors.forestDeep }}>{d.name}</p>
-                      <p className="text-xs leading-relaxed" style={{ color: colors.inkSoft }}>{d.detail}</p>
-                    </div>
-                  ))}
+                  </TiltLayer>
                 </div>
-              </div>
-            </div>
-          </motion.div>
+              </TiltCard>
+            </motion.div>
+          ))}
         </div>
+
+        {/* Beverages + Desserts */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6 }}
+          className="grid sm:grid-cols-2 gap-6"
+        >
+          <div className="rounded-3xl p-6" style={{ background: colors.creamDeep, border: `1px solid ${colors.sageLight}` }}>
+            <p className="uppercase tracking-[0.15em] text-xs font-semibold mb-4" style={{ color: colors.goldDark }}>Beverages</p>
+            <ul className="space-y-2.5">
+              {beverages.map((b) => (
+                <li key={b} className="text-sm leading-relaxed" style={{ color: colors.inkSoft }}>{b}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-3xl p-6" style={{ background: colors.creamDeep, border: `1px solid ${colors.sageLight}` }}>
+            <p className="uppercase tracking-[0.15em] text-xs font-semibold mb-4" style={{ color: colors.goldDark }}>Desserts</p>
+            <div className="space-y-3">
+              {desserts.map((d) => (
+                <div key={d.name}>
+                  <p className="text-sm font-semibold" style={{ color: colors.forestDeep }}>{d.name}</p>
+                  <p className="text-xs leading-relaxed" style={{ color: colors.inkSoft }}>{d.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6 }}
-          className="mt-14 rounded-3xl p-8 sm:p-10 text-center max-w-3xl mx-auto"
-          style={{ background: colors.creamDeep, border: `1px solid ${colors.sageLight}` }}
+          className="mt-16 rounded-3xl p-8 sm:p-10 text-center max-w-3xl mx-auto"
+          style={{ background: colors.forestDeep }}
         >
-          <p className="text-base sm:text-lg italic leading-relaxed mb-4" style={{ color: colors.forestDeep }}>
+          <p className="text-base sm:text-lg italic leading-relaxed mb-4 text-white">
             &ldquo;Our goal isn&apos;t just to feed students — it&apos;s to give them a
             balanced meal that fuels learning, supports focus, and nurtures
             healthy growth. School, family, and cafeteria are partners in
             building a generation with better health and sound eating
             habits.&rdquo;
           </p>
-          <p className="text-sm" style={{ color: colors.inkSoft }}>
+          <p className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
             Our menu is reviewed regularly with a nutrition specialist, and
             adapted to the latest guidance, school policy, and the needs of
             different age groups.
