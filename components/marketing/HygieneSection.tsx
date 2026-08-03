@@ -28,8 +28,8 @@ const practices = [
   },
   {
     icon: Wheat,
-    title: 'Fresh, not frozen',
-    copy: 'Menus are prepared fresh on a weekly cycle rather than stockpiled — quality over shelf life.',
+    title: 'No shortcuts on ingredients',
+    copy: 'No preservatives or hydrogenated fats — whole wheat flour, 100% natural butter, and extra virgin olive oil in our zaatar mix.',
   },
   {
     icon: ShieldCheck,
