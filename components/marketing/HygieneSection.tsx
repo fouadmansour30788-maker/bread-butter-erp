@@ -57,7 +57,7 @@ export function HygieneSection() {
           </p>
         </div>
 
-        {/* Banner video: whole-wheat ingredient close-up -> hands-on dough prep */}
+        {/* Banner video: gloving up, temperature control, sanitizing, compostable packaging & allergen labeling */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -67,8 +67,8 @@ export function HygieneSection() {
           style={{ boxShadow: '0 20px 45px -20px rgba(18,42,28,0.35)' }}
         >
           <ParallaxMedia className="h-full">
-            <video autoPlay muted loop playsInline poster="/videos/hygiene-ingredients-poster.jpg" className="w-full h-full object-cover">
-              <source src="/videos/hygiene-ingredients.mp4" type="video/mp4" />
+            <video autoPlay muted loop playsInline poster="/videos/hygiene-trust-safety-poster.jpg" className="w-full h-full object-cover">
+              <source src="/videos/hygiene-trust-safety.mp4" type="video/mp4" />
             </video>
           </ParallaxMedia>
         </motion.div>
