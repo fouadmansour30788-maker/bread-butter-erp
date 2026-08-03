@@ -153,21 +153,23 @@ export function MenuShowcase() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6 }}
-          className="mt-16 rounded-3xl p-8 sm:p-10 text-center max-w-3xl mx-auto"
+          className="mt-16 rounded-3xl p-8 sm:p-10 text-center"
           style={{ background: colors.forestDeep }}
         >
-          <p className="text-base sm:text-lg italic leading-relaxed mb-4 text-white">
-            &ldquo;Our goal isn&apos;t just to feed students — it&apos;s to give them a
-            balanced meal that fuels learning, supports focus, and nurtures
-            healthy growth. School, family, and cafeteria are partners in
-            building a generation with better health and sound eating
-            habits.&rdquo;
-          </p>
-          <p className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
-            Our menu is reviewed regularly with a nutrition specialist, and
-            adapted to the latest guidance, school policy, and the needs of
-            different age groups.
-          </p>
+          <div className="max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg italic leading-relaxed mb-4 text-white">
+              &ldquo;Our goal isn&apos;t just to feed students — it&apos;s to give them a
+              balanced meal that fuels learning, supports focus, and nurtures
+              healthy growth. School, family, and cafeteria are partners in
+              building a generation with better health and sound eating
+              habits.&rdquo;
+            </p>
+            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              Our menu is reviewed regularly with a nutrition specialist, and
+              adapted to the latest guidance, school policy, and the needs of
+              different age groups.
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>
