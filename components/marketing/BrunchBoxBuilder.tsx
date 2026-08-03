@@ -123,16 +123,20 @@ export function BrunchBoxBuilder() {
                 whileDrag={{ scale: 1.15, zIndex: 10 }}
                 whileHover={!isFull ? { scale: 1.08 } : undefined}
                 whileTap={!isFull ? { scale: 0.94 } : undefined}
-                animate={!isFull ? { y: [0, -5, 0] } : { y: 0 }}
-                transition={!isFull ? { y: { duration: 2.2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 } } : undefined}
                 onDragEnd={(_, info) => handleDragEnd(food, info)}
                 onClick={() => addFood(food)}
                 disabled={isFull}
                 className="flex flex-col items-center gap-1.5 px-4 py-3 rounded-2xl disabled:opacity-40"
                 style={{ background: colors.creamDeep, border: `1px solid ${colors.sageLight}`, touchAction: 'none' }}
               >
-                <food.icon size={22} color={colors.forestDeep} />
-                <span className="text-xs font-medium" style={{ color: colors.inkSoft }}>{food.label}</span>
+                <motion.div
+                  className="flex flex-col items-center gap-1.5"
+                  animate={!isFull ? { y: [0, -5, 0] } : { y: 0 }}
+                  transition={!isFull ? { duration: 2.2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.2 } : undefined}
+                >
+                  <food.icon size={22} color={colors.forestDeep} />
+                  <span className="text-xs font-medium" style={{ color: colors.inkSoft }}>{food.label}</span>
+                </motion.div>
               </motion.button>
             ))}
           </div>
