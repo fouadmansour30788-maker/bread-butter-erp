@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     q: 'How often do you deliver, and how does stock work?',
-    a: "Deliveries run on a weekly cycle — fresh stock arrives at your school's kiosk, with our team tracking what's delivered, sold, and remaining throughout the week to keep things running smoothly.",
+    a: "Deliveries run on a daily cycle — fresh stock arrives at your school's kiosk every day, with our team tracking what's delivered, sold, and remaining to keep things running smoothly.",
   },
   {
     q: 'What hygiene practices do you follow?',
@@ -32,7 +32,7 @@ const faqs = [
   },
   {
     q: 'Do you offer catering for one-off school events, or only regular kiosk service?',
-    a: 'Both — we run weekly kiosk deliveries for daily brunch and bakery needs, and separate event catering for things like sports days, graduations, and parent events.',
+    a: 'Both — we run daily kiosk deliveries for fresh brunch and bakery needs, and separate event catering for things like sports days, graduations, and parent events.',
   },
 ]
 

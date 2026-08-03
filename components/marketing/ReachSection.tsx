@@ -8,7 +8,7 @@ import { colors } from './theme'
 const stats: { value: React.ReactNode; label: string }[] = [
   { value: <CountUp to={5} />, label: 'Partner school kiosks' },
   { value: 'North Lebanon', label: 'Tripoli area focus' },
-  { value: 'Weekly', label: 'Delivery cycle' },
+  { value: 'Daily', label: 'Fresh stock delivery' },
   { value: <CountUp to={49} suffix="+" />, label: 'Menu items across our range' },
 ]
 
@@ -33,7 +33,7 @@ export function ReachSection() {
             5 school kiosks and growing across North Lebanon
           </h2>
           <p className="text-base leading-relaxed mb-10" style={{ color: colors.inkSoft }}>
-            Every kiosk we run gets the same weekly rhythm: fresh deliveries,
+            Every kiosk we run gets the same daily rhythm: fresh deliveries,
             careful tracking, and a team that knows the school. As we take on
             new schools, that same standard travels with us.
           </p>

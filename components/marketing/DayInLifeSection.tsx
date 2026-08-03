@@ -16,7 +16,7 @@ const STAGES = [
     image: marketingImages.catering,
     time: '7:00 AM',
     title: 'Fresh stock reaches every kiosk',
-    copy: 'Weekly deliveries land at each school, counted and logged before the first bell rings.',
+    copy: 'Fresh deliveries land at each school every morning, counted and logged before the first bell rings.',
   },
   {
     image: marketingImages.hero,
