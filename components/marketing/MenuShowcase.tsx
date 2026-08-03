@@ -83,23 +83,24 @@ export function MenuShowcase() {
           </ParallaxMedia>
         </motion.div>
 
-        {/* Commitments, as a compact chip row */}
+        {/* Commitments, as an equal-width grid (6 items -> clean 2 or 3 rows,
+            not a ragged flex-wrap of variable-width pills) */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, delay: 0.05 }}
-          className="flex flex-wrap gap-2.5 mb-16"
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-16"
         >
           {commitments.map((c) => (
-            <span
+            <div
               key={c}
-              className="flex items-center gap-2 pl-3 pr-4 py-2 rounded-full text-xs sm:text-sm font-medium"
+              className="flex items-center gap-2.5 rounded-2xl px-4 py-3 text-sm font-medium"
               style={{ background: colors.forestDeep, color: 'white' }}
             >
-              <CheckCircle2 size={14} color={colors.gold} className="shrink-0" />
+              <CheckCircle2 size={16} color={colors.gold} className="shrink-0" />
               {c}
-            </span>
+            </div>
           ))}
         </motion.div>
 
