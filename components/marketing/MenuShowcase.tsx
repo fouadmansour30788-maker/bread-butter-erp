@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion'
 import { CheckCircle2 } from 'lucide-react'
 import { TiltCard, TiltLayer } from './TiltCard'
-import { ParallaxMedia } from './ParallaxMedia'
 import { marketingImages } from './images'
 import { colors } from './theme'
 
@@ -78,11 +77,13 @@ export function MenuShowcase() {
           className="relative rounded-[1.75rem] overflow-hidden aspect-video mb-8"
           style={{ boxShadow: '0 20px 45px -20px rgba(18,42,28,0.35)' }}
         >
-          <ParallaxMedia className="h-full">
-            <video autoPlay muted loop playsInline poster={marketingImages.menuPastries} className="w-full h-full object-cover">
-              <source src="/videos/menu-kiosk-serving.mp4" type="video/mp4" />
-            </video>
-          </ParallaxMedia>
+          {/* Plain wrapper, not ParallaxMedia — that component zooms content
+              ~28% by default to allow its scroll-drift effect without
+              revealing gaps, which crops enough of this video's edges to
+              slice through the burned-in "Packed with Care" caption. */}
+          <video autoPlay muted loop playsInline poster={marketingImages.menuPastries} className="w-full h-full object-cover">
+            <source src="/videos/menu-kiosk-serving.mp4" type="video/mp4" />
+          </video>
         </motion.div>
 
         {/* Commitments, as an equal-width grid (6 items -> clean 2 or 3 rows,
