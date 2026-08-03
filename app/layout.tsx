@@ -6,8 +6,8 @@ const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-display', weig
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
-  title: 'Bread & Butter — Smart Bites for Bright Minds',
-  description: 'Wholesome bakery cafeteria and catering for North Lebanon schools — brunch boxes, healthy menus, and school event catering.',
+  title: 'Bread & Butter: Smart Bites for Bright Minds',
+  description: 'Wholesome bakery cafeteria and catering for North Lebanon schools. Brunch boxes, healthy menus, and school event catering.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -6,9 +6,9 @@ import { BrunchBoxBuilder } from './BrunchBoxBuilder'
 import { colors } from './theme'
 
 const points = [
-  { icon: Sparkles, text: 'Mix a main, fruit, veggies, and a drink — just like the real box' },
+  { icon: Sparkles, text: 'Mix a main, fruit, veggies, and a drink, just like the real box' },
   { icon: Users, text: 'A fun way for parents and kids to picture what shows up at school' },
-  { icon: Clock, text: 'Takes 10 seconds — try a few combinations' },
+  { icon: Clock, text: 'Takes 10 seconds. Try a few combinations' },
 ]
 
 export function BrunchBoxSection() {
@@ -32,7 +32,7 @@ export function BrunchBoxSection() {
               Build a Brunch Box
             </h2>
             <p className="text-base leading-relaxed mb-8" style={{ color: colors.inkSoft }}>
-              See how easy it is to put together a balanced meal — pick a few
+              See how easy it is to put together a balanced meal. Pick a few
               favorites, drag or click them into the box, and fill it up.
             </p>
 

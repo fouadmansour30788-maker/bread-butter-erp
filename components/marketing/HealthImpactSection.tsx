@@ -48,7 +48,7 @@ export function HealthImpactSection() {
           </h2>
           <p className="text-base leading-relaxed" style={{ color: 'rgba(255,255,255,0.78)' }}>
             The link between nutrition and student wellbeing isn&apos;t just a
-            slogan for us — it&apos;s the whole reason Bread &amp; Butter
+            slogan for us. It&apos;s the whole reason Bread &amp; Butter
             exists. Every brunch box and menu item is designed with a child&apos;s
             mental and physical health in mind, so families and schools can
             trust what shows up on the tray.

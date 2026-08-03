@@ -40,7 +40,7 @@ export function CateringSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-lg italic mb-10"
+          className="text-lg mb-10"
           style={{ color: 'rgba(255,255,255,0.85)' }}
         >
           &ldquo;Delicious support for every event&rdquo;

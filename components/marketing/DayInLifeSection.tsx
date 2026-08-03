@@ -22,13 +22,13 @@ const STAGES = [
     image: marketingImages.hero,
     time: '10:30 AM',
     title: 'Recess means a real meal',
-    copy: 'Brunch boxes and bakery favorites replace vending-machine snacks — actual nutrition, not just filler.',
+    copy: 'Brunch boxes and bakery favorites replace vending-machine snacks. Actual nutrition, not just filler.',
   },
   {
     image: marketingImages.healthImpact,
     time: '2:00 PM',
     title: 'Afternoon energy that lasts',
-    copy: 'No sugar crash, no slump — just steady focus through to the final class.',
+    copy: 'No sugar crash, no slump. Just steady focus through to the final class.',
   },
 ] as const
 

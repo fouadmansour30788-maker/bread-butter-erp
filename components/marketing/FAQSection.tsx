@@ -8,7 +8,7 @@ import { colors } from './theme'
 const faqs = [
   {
     q: 'How is pricing determined for a school?',
-    a: "Pricing depends on your school's size, the services you need (Brunch Box, bakery menu, catering, or a mix), and delivery frequency. After you submit the application form, our team puts together a tailored proposal — there's no one-size-fits-all package.",
+    a: "Pricing depends on your school's size, the services you need (Brunch Box, bakery menu, catering, or a mix), and delivery frequency. After you submit the application form, our team puts together a tailored proposal. There's no one-size-fits-all package.",
   },
   {
     q: 'How do you handle allergies and dietary restrictions?',
@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     q: 'How often do you deliver, and how does stock work?',
-    a: "Deliveries run on a daily cycle — fresh stock arrives at your school's kiosk every day, with our team tracking what's delivered, sold, and remaining to keep things running smoothly.",
+    a: "Deliveries run on a daily cycle. Fresh stock arrives at your school's kiosk every day, with our team tracking what's delivered, sold, and remaining to keep things running smoothly.",
   },
   {
     q: 'What hygiene practices do you follow?',
@@ -32,7 +32,7 @@ const faqs = [
   },
   {
     q: 'Do you offer catering for one-off school events, or only regular kiosk service?',
-    a: 'Both — we run daily kiosk deliveries for fresh brunch and bakery needs, and separate event catering for things like sports days, graduations, and parent events.',
+    a: 'Both. We run daily kiosk deliveries for fresh brunch and bakery needs, and separate event catering for things like sports days, graduations, and parent events.',
   },
 ]
 

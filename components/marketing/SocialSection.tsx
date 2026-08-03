@@ -22,7 +22,7 @@ export function SocialSection() {
         </h2>
         <p className="text-base leading-relaxed mb-9" style={{ color: 'rgba(255,255,255,0.8)' }}>
           Menu updates, behind-the-scenes from the kitchen, and everything new
-          at Bread &amp; Butter — follow along on Instagram and Facebook.
+          at Bread &amp; Butter. Follow along on Instagram and Facebook.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4">

@@ -16,7 +16,7 @@ const cards = [
   {
     icon: Sparkles,
     label: 'Our Vision',
-    copy: 'To be the leading bakery cafeteria for students, known for our commitment to health, quality, and sustainability — a welcoming space where students thrive academically and socially.',
+    copy: 'To be the leading bakery cafeteria for students, known for our commitment to health, quality, and sustainability: a welcoming space where students thrive academically and socially.',
   },
 ]
 
@@ -52,7 +52,7 @@ export function AboutSection() {
           </h2>
           <p className="text-base leading-relaxed mb-10" style={{ color: colors.inkSoft }}>
             We believe every child deserves to open their lunch box and find
-            more than just a meal — they deserve attention and genuine care.
+            more than just a meal. They deserve attention and genuine care.
             That&apos;s why our brunch boxes, bakery menus, and event catering
             are designed for kindergarten and early-grade students, balancing
             nutrition, variety, and taste, with a close eye on food hygiene

@@ -27,7 +27,7 @@ const bakery = [
   },
   {
     name: 'Whole Wheat Feuilleté',
-    detail: 'Flaky croissant-dough pastry made with 100% natural butter, filled with natural cheese or zaatar. Baked fresh daily, no preservatives — at least 100g, a filling, balanced meal for the school day.',
+    detail: 'Flaky croissant-dough pastry made with 100% natural butter, filled with natural cheese or zaatar. Baked fresh daily, no preservatives, at least 100g, a filling, balanced meal for the school day.',
   },
   {
     name: 'Whole Wheat Croissant',
@@ -44,12 +44,12 @@ const beverages = [
   'Fresh lemon juice, no added sugar (200ml)',
   'Fresh carrot juice, no added sugar (200ml)',
   'Milk (125ml)',
-  'Selected fruit juices — 100% juice, no added sugar, prioritized where available',
+  'Selected fruit juices, 100% juice, no added sugar, prioritized where available',
 ]
 
 const desserts = [
   { name: 'Homemade cookies', detail: 'Baked fresh daily, no preservatives, at least 25g.' },
-  { name: 'Chocolate', detail: 'Limited, individually-sized portions, max 25g — water, milk, and healthy options always offered first.' },
+  { name: 'Chocolate', detail: 'Limited, individually-sized portions, max 25g. Water, milk, and healthy options always offered first.' },
 ]
 
 export function MenuShowcase() {
@@ -65,7 +65,7 @@ export function MenuShowcase() {
           </h2>
           <p className="text-base leading-relaxed" style={{ color: colors.inkSoft }}>
             Every item is prepared fresh with real portions and real
-            ingredients — a genuine meal, not just a snack.
+            ingredients, a genuine meal, not just a snack.
           </p>
         </div>
 
@@ -158,8 +158,8 @@ export function MenuShowcase() {
           style={{ background: colors.forestDeep }}
         >
           <div className="max-w-2xl mx-auto">
-            <p className="text-base sm:text-lg italic leading-relaxed mb-4 text-white">
-              &ldquo;Our goal isn&apos;t just to feed students — it&apos;s to give them a
+            <p className="text-base sm:text-lg leading-relaxed mb-4 text-white">
+              &ldquo;Our goal isn&apos;t just to feed students. It&apos;s to give them a
               balanced meal that fuels learning, supports focus, and nurtures
               healthy growth. School, family, and cafeteria are partners in
               building a generation with better health and sound eating

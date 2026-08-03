@@ -29,7 +29,7 @@ const practices = [
   {
     icon: Wheat,
     title: 'No shortcuts on ingredients',
-    copy: 'No preservatives or hydrogenated fats — whole wheat flour, 100% natural butter, and extra virgin olive oil in our zaatar mix.',
+    copy: 'No preservatives or hydrogenated fats. Whole wheat flour, 100% natural butter, and extra virgin olive oil in our zaatar mix.',
   },
   {
     icon: ShieldCheck,
@@ -47,11 +47,11 @@ export function HygieneSection() {
             Trust &amp; safety
           </p>
           <h2 className="font-display font-semibold text-3xl sm:text-4xl leading-tight mb-5" style={{ color: colors.forestDeep }}>
-            Food safety isn&apos;t an afterthought — it&apos;s the process
+            Food safety isn&apos;t an afterthought. It&apos;s the process
           </h2>
           <p className="text-base leading-relaxed" style={{ color: colors.inkSoft }}>
             From prep to tray, every step is designed around hygiene,
-            freshness, and accountability — so schools and parents can trust
+            freshness, and accountability, so schools and parents can trust
             what shows up on the tray.
           </p>
         </div>

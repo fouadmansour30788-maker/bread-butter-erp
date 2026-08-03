@@ -14,7 +14,7 @@ export const nutritionVideos = [
   },
   {
     id: 'L1StpMfMwXY',
-    title: 'Eat the Rainbow — a nutrition lesson for kids',
+    title: 'Eat the Rainbow: a nutrition lesson for kids',
     channel: 'Physicians Committee',
   },
 ] as const

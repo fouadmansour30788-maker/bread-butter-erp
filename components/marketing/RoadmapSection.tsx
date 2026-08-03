@@ -9,13 +9,13 @@ const pillars = [
   {
     icon: CreditCard,
     title: 'Digital payments & order tracking',
-    copy: 'Parents top up an account and see exactly what their child orders, in real time — no cash lost in backpacks.',
+    copy: 'Parents top up an account and see exactly what their child orders, in real time, no cash lost in backpacks.',
     accent: 'gold',
   },
   {
     icon: Network,
     title: 'The Bread & Butter ecosystem',
-    copy: 'One connected platform linking schools, parents, and students — ordering, communication, and wellbeing in a single place.',
+    copy: 'One connected platform linking schools, parents, and students: ordering, communication, and wellbeing in a single place.',
     accent: 'sage',
   },
   {
@@ -39,7 +39,7 @@ const pillars = [
   {
     icon: Gift,
     title: 'Rewards for healthy choices',
-    copy: 'Points for choosing fruit over candy, redeemable for future meals — turning good habits into a game.',
+    copy: 'Points for choosing fruit over candy, redeemable for future meals, turning good habits into a game.',
     accent: 'sage',
   },
   {
@@ -74,7 +74,7 @@ export function RoadmapSection() {
           </h2>
           <p className="text-base leading-relaxed" style={{ color: colors.inkSoft }}>
             Today&apos;s brunch boxes and bakery menus are just the start. Here&apos;s
-            the platform we&apos;re building toward — for schools, parents, and
+            the platform we&apos;re building toward, for schools, parents, and
             the kids in between.
           </p>
         </div>
