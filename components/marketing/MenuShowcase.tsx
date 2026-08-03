@@ -103,31 +103,19 @@ export function MenuShowcase() {
           ))}
         </motion.div>
 
-        {/* Bakery grid */}
+        {/* Bakery — two fully-filled rows (2 manakish + 3 others) rather than a
+            5-item/3-col grid, which leaves a gap in an incomplete last row */}
         <p className="uppercase tracking-[0.15em] text-xs font-semibold mb-5" style={{ color: colors.goldDark }}>
           Bakery
         </p>
+        <div className="grid sm:grid-cols-2 gap-5 mb-5">
+          {bakery.slice(0, 2).map((item, i) => (
+            <BakeryCard key={item.name} item={item} delay={i * 0.08} />
+          ))}
+        </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
-          {bakery.map((item, i) => (
-            <motion.div
-              key={item.name}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
-            >
-              <TiltCard maxTilt={6}>
-                <div
-                  className="h-full rounded-3xl p-6"
-                  style={{ background: 'white', border: `1px solid ${colors.sageLight}`, boxShadow: '0 12px 30px -18px rgba(18,42,28,0.2)' }}
-                >
-                  <TiltLayer z={20}>
-                    <p className="font-display text-lg mb-2" style={{ color: colors.forestDeep }}>{item.name}</p>
-                    <p className="text-sm leading-relaxed" style={{ color: colors.inkSoft }}>{item.detail}</p>
-                  </TiltLayer>
-                </div>
-              </TiltCard>
-            </motion.div>
+          {bakery.slice(2).map((item, i) => (
+            <BakeryCard key={item.name} item={item} delay={i * 0.08} />
           ))}
         </div>
 
@@ -183,5 +171,28 @@ export function MenuShowcase() {
         </motion.div>
       </div>
     </section>
+  )
+}
+
+function BakeryCard({ item, delay }: { item: { name: string; detail: string }; delay: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.5, delay }}
+    >
+      <TiltCard maxTilt={6}>
+        <div
+          className="h-full rounded-3xl p-6"
+          style={{ background: 'white', border: `1px solid ${colors.sageLight}`, boxShadow: '0 12px 30px -18px rgba(18,42,28,0.2)' }}
+        >
+          <TiltLayer z={20}>
+            <p className="font-display text-lg mb-2" style={{ color: colors.forestDeep }}>{item.name}</p>
+            <p className="text-sm leading-relaxed" style={{ color: colors.inkSoft }}>{item.detail}</p>
+          </TiltLayer>
+        </div>
+      </TiltCard>
+    </motion.div>
   )
 }
