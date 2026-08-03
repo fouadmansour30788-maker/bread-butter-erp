@@ -38,7 +38,10 @@ export function TiltCard({
   }
 
   return (
-    <div style={{ perspective: 1200 }} className={cn('h-full', className)}>
+    // overflow: hidden keeps the 3D perspective box from inflating the
+    // page's scrollable width/height on mobile WebKit/Blink, which can
+    // otherwise happen even when nothing visually escapes the card.
+    <div style={{ perspective: 1200, overflow: 'hidden' }} className={cn('h-full', className)}>
       <motion.div
         ref={ref}
         onMouseMove={handleMouseMove}
