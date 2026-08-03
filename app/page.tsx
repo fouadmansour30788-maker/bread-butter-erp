@@ -7,7 +7,6 @@ import { Preloader } from '@/components/marketing/Preloader'
 import { MarketingNav } from '@/components/marketing/MarketingNav'
 import { Hero } from '@/components/marketing/Hero'
 import { AboutSection } from '@/components/marketing/AboutSection'
-import { DayInLifeSection } from '@/components/marketing/DayInLifeSection'
 import { HealthImpactSection } from '@/components/marketing/HealthImpactSection'
 import { NutritionTips } from '@/components/marketing/NutritionTips'
 import { MenuShowcase } from '@/components/marketing/MenuShowcase'
@@ -32,7 +31,6 @@ export default function HomePage() {
       <MarketingNav />
       <Hero />
       <AboutSection />
-      <DayInLifeSection />
       <HealthImpactSection />
       <NutritionTips />
       <MenuShowcase />
