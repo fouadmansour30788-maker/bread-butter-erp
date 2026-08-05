@@ -6,8 +6,6 @@ import { ChevronDown, Wheat, Sparkles } from 'lucide-react'
 import { Magnetic } from './Magnetic'
 import { colors } from './theme'
 
-const TAGLINE = 'Smart Bites for Bright Minds'
-
 export function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const videoWrapRef = useRef<HTMLDivElement>(null)
@@ -39,14 +37,6 @@ export function Hero() {
     rotateY.set(0)
   }
 
-  // Flattened word -> character list with a running global index, so the
-  // rise-in stagger and the later shimmer-wave stagger both read as one
-  // continuous left-to-right sweep across the whole tagline.
-  let letterCount = 0
-  const wordData = TAGLINE.split(' ').map((word) =>
-    word.split('').map((ch) => ({ ch, idx: letterCount++ }))
-  )
-
   return (
     <section
       ref={sectionRef}
@@ -72,9 +62,7 @@ export function Hero() {
       <FloatingIcon icon={Wheat} className="hidden sm:block absolute bottom-[14%] right-[14%]" size={22} delay={0.6} duration={9} />
 
       {/* Video: entrance reveal + scroll-exit parallax + mouse tilt, layered
-          across separate elements so each transform composes independently.
-          The tagline overlay lives inside the tilt layer too, so it rides
-          along with the video's mouse-tilt instead of feeling pasted on. */}
+          across separate elements so each transform composes independently. */}
       <div style={{ perspective: 1200 }} className="relative z-10 w-full max-w-5xl">
         <motion.div style={{ scale: exitScale, y: exitY, opacity: exitOpacity }}>
           <motion.div
@@ -101,39 +89,6 @@ export function Hero() {
             >
               <source src="/videos/hero-dough-to-joy.mp4" type="video/mp4" />
             </video>
-
-            {/* Tagline: frosted-glass pill floating over the lower third of
-                the video, letters rising in one by one, then a one-time gold
-                shimmer wave sweeping across the landed letters. */}
-            <div className="absolute inset-x-0 bottom-0 flex justify-center px-4 pb-6 sm:pb-9">
-              <motion.h1
-                initial={{ opacity: 0, y: 24, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="inline-flex flex-wrap justify-center gap-x-2.5 gap-y-1 px-5 py-3 sm:px-7 sm:py-4 rounded-full font-display font-semibold text-lg sm:text-2xl"
-                style={{ background: 'rgba(18,42,28,0.4)', border: '1px solid rgba(255,255,255,0.18)', backdropFilter: 'blur(10px)' }}
-              >
-                {wordData.map((chars, wi) => (
-                  <span key={wi} className="inline-flex overflow-hidden pb-1">
-                    {chars.map(({ ch, idx }) => (
-                      <motion.span
-                        key={idx}
-                        initial={{ y: '100%', opacity: 0, color: '#ffffff' }}
-                        animate={{ y: '0%', opacity: 1, color: ['#ffffff', '#ffffff', colors.gold, '#ffffff'] }}
-                        transition={{
-                          y: { duration: 0.45, delay: 0.65 + idx * 0.028, ease: [0.22, 1, 0.36, 1] },
-                          opacity: { duration: 0.45, delay: 0.65 + idx * 0.028 },
-                          color: { duration: 0.5, delay: 1.7 + idx * 0.028, times: [0, 0.3, 0.5, 1] },
-                        }}
-                        className="inline-block"
-                      >
-                        {ch}
-                      </motion.span>
-                    ))}
-                  </span>
-                ))}
-              </motion.h1>
-            </div>
           </motion.div>
         </motion.div>
       </div>
