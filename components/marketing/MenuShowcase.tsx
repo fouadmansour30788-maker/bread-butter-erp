@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion'
 import { CheckCircle2 } from 'lucide-react'
 import { TiltCard, TiltLayer } from './TiltCard'
-import { marketingImages } from './images'
 import { colors } from './theme'
 
 const commitments = [
@@ -68,7 +67,9 @@ export function MenuShowcase() {
           </p>
         </div>
 
-        {/* Banner video: real delivery van -> kiosk handoff footage */}
+        {/* Banner video: real delivery van -> tray handoff -> kiosk service ->
+            kids eating footage, matches the aspect-video container exactly
+            (source is native 16:9) so the burned-in captions never crop. */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -80,9 +81,9 @@ export function MenuShowcase() {
           {/* Plain wrapper, not ParallaxMedia — that component zooms content
               ~28% by default to allow its scroll-drift effect without
               revealing gaps, which crops enough of this video's edges to
-              slice through the burned-in "Packed with Care" caption. */}
-          <video autoPlay muted loop playsInline poster={marketingImages.menuPastries} className="w-full h-full object-cover">
-            <source src="/videos/menu-kiosk-serving.mp4" type="video/mp4" />
+              slice through the burned-in captions. */}
+          <video autoPlay muted loop playsInline poster="/videos/menu-daily-kiosk-poster.jpg" className="w-full h-full object-cover">
+            <source src="/videos/menu-daily-kiosk.mp4" type="video/mp4" />
           </video>
         </motion.div>
 
