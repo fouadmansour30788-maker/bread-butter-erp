@@ -8,7 +8,7 @@ import { colors } from './theme'
 export function SocialSection() {
   return (
     <ParallaxSection
-      image={marketingImages.menuPastries}
+      image={marketingImages.socialBakery}
       speed={0.2}
       className="py-24 sm:py-28"
       overlay={`linear-gradient(160deg, rgba(15,35,23,0.93) 0%, rgba(18,42,28,0.9) 100%)`}

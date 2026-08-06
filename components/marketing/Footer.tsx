@@ -1,19 +1,15 @@
 import { Phone, Mail, Globe } from 'lucide-react'
 import { colors } from './theme'
 import { FacebookIcon, InstagramIcon } from './icons'
-import { Mascot } from './Mascot'
 
 export function Footer() {
   return (
     <footer style={{ background: colors.forestDeep }} className="pt-16 pb-8">
       <div className="max-w-6xl mx-auto px-5 sm:px-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8 pb-10" style={{ borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
-          <div className="flex items-center gap-3">
-            <Mascot size={40} className="shrink-0" />
-            <div>
-              <p className="font-display text-lg text-white leading-none">Bread &amp; Butter</p>
-              <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.55)' }}>Smart bites for bright minds</p>
-            </div>
+          <div>
+            <p className="font-display text-lg text-white leading-none">Bread &amp; Butter</p>
+            <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.55)' }}>Smart bites for bright minds</p>
           </div>
 
           <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm" style={{ color: 'rgba(255,255,255,0.75)' }}>
