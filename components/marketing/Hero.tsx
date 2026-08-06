@@ -9,6 +9,9 @@ import { colors } from './theme'
 export function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const videoWrapRef = useRef<HTMLDivElement>(null)
+  const rectRef = useRef<DOMRect | null>(null)
+  const pendingRef = useRef<{ x: number; y: number } | null>(null)
+  const rafRef = useRef<number | null>(null)
 
   // Exit parallax: as the user scrolls past the hero, the video box drifts
   // and settles back slightly so the handoff into the next section feels
@@ -23,16 +26,32 @@ export function Hero() {
   const rotateX = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 })
   const rotateY = useSpring(useMotionValue(0), { stiffness: 200, damping: 20 })
 
+  // getBoundingClientRect() forces a synchronous layout read — calling it on
+  // every mousemove event (which can fire dozens of times per frame) was
+  // blocking the main thread for 500ms+. Cache the rect once per hover
+  // session instead, and coalesce updates to one per animation frame.
   function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
-    const el = videoWrapRef.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const px = (e.clientX - rect.left) / rect.width - 0.5
-    const py = (e.clientY - rect.top) / rect.height - 0.5
-    rotateY.set(px * 8)
-    rotateX.set(-py * 8)
+    if (!rectRef.current) {
+      const el = videoWrapRef.current
+      if (!el) return
+      rectRef.current = el.getBoundingClientRect()
+    }
+    pendingRef.current = { x: e.clientX, y: e.clientY }
+    if (rafRef.current == null) {
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = null
+        const rect = rectRef.current
+        const pos = pendingRef.current
+        if (!rect || !pos) return
+        const px = (pos.x - rect.left) / rect.width - 0.5
+        const py = (pos.y - rect.top) / rect.height - 0.5
+        rotateY.set(px * 8)
+        rotateX.set(-py * 8)
+      })
+    }
   }
   function handleMouseLeave() {
+    rectRef.current = null
     rotateX.set(0)
     rotateY.set(0)
   }
