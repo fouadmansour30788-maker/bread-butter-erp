@@ -84,10 +84,10 @@ export function Hero() {
               muted
               loop
               playsInline
-              poster="/videos/hero-dough-to-joy-poster.jpg"
+              poster="/videos/hero-wheat-to-smiles-poster.jpg"
               className="absolute inset-0 w-full h-full object-cover"
             >
-              <source src="/videos/hero-dough-to-joy.mp4" type="video/mp4" />
+              <source src="/videos/hero-wheat-to-smiles.mp4" type="video/mp4" />
             </video>
           </motion.div>
         </motion.div>
