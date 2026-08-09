@@ -82,8 +82,8 @@ export function MenuShowcase() {
               ~28% by default to allow its scroll-drift effect without
               revealing gaps, which crops enough of this video's edges to
               slice through the burned-in captions. */}
-          <video autoPlay muted loop playsInline poster="/videos/menu-daily-kiosk-poster.jpg" className="w-full h-full object-cover">
-            <source src="/videos/menu-daily-kiosk.mp4" type="video/mp4" />
+          <video autoPlay muted loop playsInline poster="/videos/menu-daily-handoff-poster.jpg" className="w-full h-full object-cover">
+            <source src="/videos/menu-daily-handoff.mp4" type="video/mp4" />
           </video>
         </motion.div>
 
