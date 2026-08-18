@@ -1,10 +1,10 @@
 'use client'
 
 import { useActionState } from 'react'
+import Image from 'next/image'
 import { AlertCircle } from 'lucide-react'
 import { submitSchoolApplication, type ApplyFormState } from '@/app/apply-action'
 import { ConfettiBurst } from './ConfettiBurst'
-import { Mascot } from './Mascot'
 import { colors } from './theme'
 
 const initialState: ApplyFormState = { success: false }
@@ -48,7 +48,7 @@ export function SchoolApplicationForm() {
         style={{ background: 'white', border: `1px solid ${colors.sageLight}` }}
       >
         <ConfettiBurst />
-        <Mascot size={56} className="mx-auto mb-4" />
+        <Image src="/logo.png" alt="Bread & Butter" width={56} height={56} className="mx-auto mb-4" />
         <p className="font-display text-xl mb-2" style={{ color: colors.forestDeep }}>Thank you!</p>
         <p className="text-sm" style={{ color: colors.inkSoft }}>
           We&apos;ve received your school&apos;s application. Our team will reach out shortly to discuss next steps.

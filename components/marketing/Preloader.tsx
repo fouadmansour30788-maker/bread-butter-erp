@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Mascot } from './Mascot'
 import { colors } from './theme'
 
 const SEEN_KEY = 'bb-preloader-seen'
@@ -38,7 +38,7 @@ export function Preloader() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
-            <Mascot size={96} />
+            <Image src="/logo.png" alt="Bread & Butter" width={96} height={96} priority />
           </motion.div>
         </motion.div>
       )}

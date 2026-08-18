@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Wheat, Menu, X } from 'lucide-react'
+import Image from 'next/image'
+import { Menu, X } from 'lucide-react'
 import { Magnetic } from './Magnetic'
 import { colors } from './theme'
 
@@ -37,12 +38,15 @@ export function MarketingNav() {
     >
       <nav className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
         <a href="#top" className="flex items-center gap-2.5">
-          <span
-            className="flex items-center justify-center w-9 h-9 rounded-full shrink-0"
-            style={{ background: `linear-gradient(135deg, ${colors.forestMid}, ${colors.forestDeep})`, boxShadow: '0 4px 12px rgba(29,74,48,0.35)' }}
-          >
-            <Wheat size={17} color={colors.gold} strokeWidth={2} />
-          </span>
+          <Image
+            src="/logo.png"
+            alt="Bread & Butter"
+            width={36}
+            height={36}
+            className="w-9 h-9 rounded-full shrink-0"
+            style={{ boxShadow: '0 4px 12px rgba(29,74,48,0.35)' }}
+            priority
+          />
           <span
             className="font-display font-semibold text-lg leading-none"
             style={{ color: scrolled ? colors.forestDeep : 'white' }}
