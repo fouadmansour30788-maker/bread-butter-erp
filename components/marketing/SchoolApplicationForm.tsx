@@ -48,7 +48,7 @@ export function SchoolApplicationForm() {
         style={{ background: 'white', border: `1px solid ${colors.sageLight}` }}
       >
         <ConfettiBurst />
-        <Image src="/logo.png" alt="Bread & Butter" width={56} height={56} className="mx-auto mb-4" />
+        <Image src="/logo-small.png" alt="Bread & Butter" width={192} height={192} unoptimized className="mx-auto mb-4 w-14 h-14" />
         <p className="font-display text-xl mb-2" style={{ color: colors.forestDeep }}>Thank you!</p>
         <p className="text-sm" style={{ color: colors.inkSoft }}>
           We&apos;ve received your school&apos;s application. Our team will reach out shortly to discuss next steps.

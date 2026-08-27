@@ -38,7 +38,7 @@ export function Preloader() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
-            <Image src="/logo.png" alt="Bread & Butter" width={96} height={96} priority />
+            <Image src="/logo-small.png" alt="Bread & Butter" width={192} height={192} unoptimized priority className="w-24 h-24" />
           </motion.div>
         </motion.div>
       )}

@@ -39,10 +39,11 @@ export function MarketingNav() {
       <nav className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
         <a href="#top" className="flex items-center gap-2.5">
           <Image
-            src="/logo.png"
+            src="/logo-small.png"
             alt="Bread & Butter"
-            width={36}
-            height={36}
+            width={192}
+            height={192}
+            unoptimized
             className="w-9 h-9 rounded-full shrink-0"
             style={{ boxShadow: '0 4px 12px rgba(29,74,48,0.35)' }}
             priority
