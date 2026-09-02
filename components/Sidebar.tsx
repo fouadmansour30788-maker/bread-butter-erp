@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -7,6 +8,7 @@ import {
   ClipboardList, BarChart3, ShoppingBag, Receipt, ArrowRightLeft, Inbox
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { createClient } from '@/lib/supabase/client'
 
 const nav = [
   { href: '/admin',              label: 'Dashboard',      icon: LayoutDashboard },
@@ -22,6 +24,19 @@ const nav = [
 
 export function Sidebar() {
   const pathname = usePathname()
+  const [counts, setCounts] = useState<{ schools: number; products: number } | null>(null)
+
+  useEffect(() => {
+    const supabase = createClient()
+    async function load() {
+      const [{ count: schools }, { count: products }] = await Promise.all([
+        supabase.from('schools').select('*', { count: 'exact', head: true }),
+        supabase.from('products').select('*', { count: 'exact', head: true }),
+      ])
+      setCounts({ schools: schools ?? 0, products: products ?? 0 })
+    }
+    load()
+  }, [])
 
   return (
     <aside className="w-60 min-h-screen flex flex-col" style={{
@@ -75,7 +90,9 @@ export function Sidebar() {
       <div className="p-3">
         <div className="p-3 rounded-xl" style={{ background: 'linear-gradient(135deg, #fffbeb, #fef3c7)', border: '1px solid #fde68a' }}>
           <p className="text-xs font-semibold text-amber-800">North Lebanon</p>
-          <p className="text-xs text-amber-600 mt-0.5">5 schools · 49 products</p>
+          <p className="text-xs text-amber-600 mt-0.5">
+            {counts ? `${counts.schools} school${counts.schools === 1 ? '' : 's'} · ${counts.products} product${counts.products === 1 ? '' : 's'}` : 'Loading…'}
+          </p>
         </div>
       </div>
     </aside>
