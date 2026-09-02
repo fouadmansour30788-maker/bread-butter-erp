@@ -3,15 +3,17 @@ import type { PurchaseOrder } from '@/lib/types'
 
 // Product names are in Arabic; the built-in PDF base fonts (Helvetica etc.)
 // have no Arabic glyphs and render them as garbled placeholder boxes, so a
-// real Unicode font has to be embedded for that column specifically.
+// real Unicode font has to be embedded for that column specifically. Amiri
+// is a static (non-variable) font — react-pdf's glyph subsetting mishandled
+// the variable-font version (Noto Naskh Arabic), dropping most letters.
 //
 // Fetched from this site's own /public URL rather than a local filesystem
 // path — Next.js's serverless file-tracing can't see into react-pdf's
 // internal fs.readFile call to know a local path needs to be bundled, but
 // a public/ asset is always served at its own URL regardless of tracing.
 Font.register({
-  family: 'NotoNaskhArabic',
-  src: 'https://bread-butter-erp.vercel.app/fonts/NotoNaskhArabic-Regular.ttf',
+  family: 'Amiri',
+  src: 'https://bread-butter-erp.vercel.app/fonts/Amiri-Regular.ttf',
 })
 
 const styles = StyleSheet.create({
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
   },
   th: { fontSize: 9, fontFamily: 'Helvetica-Bold', color: '#444444' },
   colProduct: { flex: 3 },
-  productName: { flex: 3, fontFamily: 'NotoNaskhArabic', textAlign: 'right', fontSize: 11 },
+  productName: { flex: 3, fontFamily: 'Amiri', textAlign: 'right', fontSize: 12 },
   colQty: { flex: 1, textAlign: 'center' },
   colCost: { flex: 1.3, textAlign: 'right' },
   colTotal: { flex: 1.3, textAlign: 'right' },
