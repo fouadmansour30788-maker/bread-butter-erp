@@ -1,5 +1,18 @@
-import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer'
+import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer'
 import type { PurchaseOrder } from '@/lib/types'
+
+// Product names are in Arabic; the built-in PDF base fonts (Helvetica etc.)
+// have no Arabic glyphs and render them as garbled placeholder boxes, so a
+// real Unicode font has to be embedded for that column specifically.
+//
+// Fetched from this site's own /public URL rather than a local filesystem
+// path — Next.js's serverless file-tracing can't see into react-pdf's
+// internal fs.readFile call to know a local path needs to be bundled, but
+// a public/ asset is always served at its own URL regardless of tracing.
+Font.register({
+  family: 'NotoNaskhArabic',
+  src: 'https://bread-butter-erp.vercel.app/fonts/NotoNaskhArabic-Regular.ttf',
+})
 
 const styles = StyleSheet.create({
   page: { padding: 40, fontSize: 10, fontFamily: 'Helvetica', color: '#182119' },
@@ -33,6 +46,7 @@ const styles = StyleSheet.create({
   },
   th: { fontSize: 9, fontFamily: 'Helvetica-Bold', color: '#444444' },
   colProduct: { flex: 3 },
+  productName: { flex: 3, fontFamily: 'NotoNaskhArabic', textAlign: 'right', fontSize: 11 },
   colQty: { flex: 1, textAlign: 'center' },
   colCost: { flex: 1.3, textAlign: 'right' },
   colTotal: { flex: 1.3, textAlign: 'right' },
@@ -93,7 +107,7 @@ export function PurchaseOrderDocument({ po }: { po: PurchaseOrder }) {
           </View>
           {items.map(item => (
             <View style={styles.tableRow} key={item.id}>
-              <Text style={styles.colProduct}>{item.product_name}</Text>
+              <Text style={styles.productName}>{item.product_name}</Text>
               <Text style={styles.colQty}>{item.quantity}</Text>
               <Text style={styles.colCost}>${Number(item.unit_cost_usd).toFixed(2)}</Text>
               <Text style={styles.colTotal}>${(item.quantity * Number(item.unit_cost_usd)).toFixed(2)}</Text>
