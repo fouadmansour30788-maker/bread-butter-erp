@@ -187,10 +187,10 @@ export default async function BatchDetailPage({ params }: { params: Promise<{ id
       )}
 
       <div className="flex gap-3">
-        <Link href={`/reconciliation/${id}`} className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-4 py-2 rounded-lg text-sm transition-colors">
+        <Link href={`/admin/reconciliation/${id}`} className="flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-4 py-2 rounded-lg text-sm transition-colors">
           <CheckCircle size={16} /> Enter Closing Count & Cash
         </Link>
-        <Link href={`/transfers/new?from=${id}`} className="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm transition-colors">
+        <Link href={`/admin/transfers/new?from=${id}`} className="flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold px-4 py-2 rounded-lg text-sm transition-colors">
           <ArrowRightLeft size={16} /> Transfer Stock
         </Link>
       </div>

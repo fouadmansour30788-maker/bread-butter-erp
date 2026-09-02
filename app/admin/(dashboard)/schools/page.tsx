@@ -46,10 +46,10 @@ export default async function SchoolsPage() {
               )}
             </div>
             <div className="flex gap-2 pt-1">
-              <Link href={`/schools/${school.id}/edit`} className="flex-1 text-center text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 py-1.5 rounded-lg transition-colors">
+              <Link href={`/admin/schools/${school.id}/edit`} className="flex-1 text-center text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 py-1.5 rounded-lg transition-colors">
                 Edit
               </Link>
-              <Link href={`/batches?school=${school.id}`} className="flex-1 text-center text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 py-1.5 rounded-lg transition-colors">
+              <Link href={`/admin/batches?school=${school.id}`} className="flex-1 text-center text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 py-1.5 rounded-lg transition-colors">
                 View Batches
               </Link>
             </div>

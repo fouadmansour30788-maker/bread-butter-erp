@@ -35,7 +35,7 @@ export default async function BatchesPage({ searchParams }: { searchParams: Prom
           All Schools
         </Link>
         {schools?.map((s) => (
-          <Link key={s.id} href={`/batches?school=${s.id}`} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${schoolFilter === s.id ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
+          <Link key={s.id} href={`/admin/batches?school=${s.id}`} className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${schoolFilter === s.id ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'}`}>
             {s.name}
           </Link>
         ))}
@@ -73,8 +73,8 @@ export default async function BatchesPage({ searchParams }: { searchParams: Prom
                   <td className="px-5 py-3.5 text-gray-500">{b.delivery_signed_driver ?? '—'}</td>
                   <td className="px-5 py-3.5 text-gray-500">{b.delivery_signed_staff ?? '—'}</td>
                   <td className="px-5 py-3.5 flex gap-3">
-                    <Link href={`/batches/${b.id}`} className="text-xs text-amber-600 hover:underline">Manage</Link>
-                    <Link href={`/reconciliation/${b.id}`} className="text-xs text-blue-600 hover:underline">Reconcile</Link>
+                    <Link href={`/admin/batches/${b.id}`} className="text-xs text-amber-600 hover:underline">Manage</Link>
+                    <Link href={`/admin/reconciliation/${b.id}`} className="text-xs text-blue-600 hover:underline">Reconcile</Link>
                   </td>
                 </tr>
               ))}

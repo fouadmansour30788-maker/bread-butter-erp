@@ -46,7 +46,7 @@ export default async function ReconciliationPage() {
                     {variance === 0 ? '✓' : (variance > 0 ? '+' : '') + formatLBP(variance)}
                   </td>
                   <td className="px-5 py-3.5">
-                    <Link href={`/reconciliation/${s.batch_id}`} className="text-xs text-amber-600 hover:underline">Enter</Link>
+                    <Link href={`/admin/reconciliation/${s.batch_id}`} className="text-xs text-amber-600 hover:underline">Enter</Link>
                   </td>
                 </tr>
               )

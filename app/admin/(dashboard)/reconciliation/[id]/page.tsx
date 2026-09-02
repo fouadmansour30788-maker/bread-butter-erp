@@ -113,7 +113,7 @@ export default function ReconciliationEntryPage() {
   return (
     <div className="p-8 max-w-4xl space-y-6">
       <div className="flex items-center gap-4">
-        <Link href={`/batches/${id}`} className="p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+        <Link href={`/admin/batches/${id}`} className="p-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
           <ArrowLeft size={16} className="text-gray-600" />
         </Link>
         <div>

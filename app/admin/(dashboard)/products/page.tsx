@@ -85,7 +85,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                     </span>
                   </td>
                   <td className="px-5 py-3.5">
-                    <Link href={`/products/${p.id}/edit`} className="text-xs text-amber-600 hover:underline">Edit</Link>
+                    <Link href={`/admin/products/${p.id}/edit`} className="text-xs text-amber-600 hover:underline">Edit</Link>
                   </td>
                 </tr>
               )
