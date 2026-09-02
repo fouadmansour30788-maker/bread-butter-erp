@@ -135,6 +135,24 @@ export type SchoolApplication = {
   created_at: string
 }
 
+export type PurchaseOrderItem = {
+  id: string
+  purchase_order_id: string
+  product_id: string | null
+  product_name: string
+  quantity: number
+  unit_cost_usd: number
+  created_at: string
+}
+
+export type PurchaseOrder = {
+  id: string
+  supplier_name: string
+  notes: string | null
+  created_at: string
+  items?: PurchaseOrderItem[]
+}
+
 export type ReconciliationSummary = {
   batch_id: string
   school_id: string
