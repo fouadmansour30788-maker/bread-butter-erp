@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { formatLBP } from '@/lib/utils'
-import { ArrowLeft, Save } from 'lucide-react'
+import { formatLBP, formatUSD } from '@/lib/utils'
+import { ArrowLeft, Save, AlertTriangle, ListChecks } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, useParams } from 'next/navigation'
 
@@ -12,6 +12,7 @@ type ItemRow = {
   product_id: string
   product_name: string
   selling_price_lbp: number
+  cost_price_usd: number
   delivered_qty: number
   remaining_qty: number
   waste_qty: number
@@ -42,7 +43,7 @@ export default function ReconciliationEntryPage() {
 
       const { data: deliveries } = await supabase
         .from('delivery_items')
-        .select('id, product_id, delivered_qty, product:products(name, selling_price_lbp)')
+        .select('id, product_id, delivered_qty, product:products(name, selling_price_lbp, cost_price_usd)')
         .eq('batch_id', id)
 
       const { data: existingCounts } = await supabase.from('closing_counts').select('*').eq('batch_id', id)
@@ -54,12 +55,13 @@ export default function ReconciliationEntryPage() {
       for (const w of existingWaste ?? []) wasteMap[w.product_id] = { qty: w.waste_qty, reason: w.reason ?? '' }
 
       setItems((deliveries ?? []).map(d => {
-        const p = d.product as unknown as { name: string; selling_price_lbp: number } | null
+        const p = d.product as unknown as { name: string; selling_price_lbp: number; cost_price_usd: number } | null
         return {
           delivery_id: d.id,
           product_id: d.product_id,
           product_name: p?.name ?? '—',
           selling_price_lbp: p?.selling_price_lbp ?? 0,
+          cost_price_usd: p?.cost_price_usd ?? 0,
           delivered_qty: d.delivered_qty,
           remaining_qty: countMap[d.product_id] ?? 0,
           waste_qty: wasteMap[d.product_id]?.qty ?? 0,
@@ -82,9 +84,22 @@ export default function ReconciliationEntryPage() {
   }
 
   const sold = items.map(i => Math.max(0, i.delivered_qty - i.remaining_qty - i.waste_qty))
+  const overCounted = items.map(i => i.remaining_qty + i.waste_qty > i.delivered_qty)
   const expectedCash = items.reduce((sum, item, i) => sum + sold[i] * item.selling_price_lbp, 0)
   const actualCash = Number(cashCollected) || 0
   const variance = expectedCash - actualCash
+
+  const totalDelivered = items.reduce((sum, i) => sum + i.delivered_qty, 0)
+  const totalRemaining = items.reduce((sum, i) => sum + i.remaining_qty, 0)
+  const totalWaste = items.reduce((sum, i) => sum + i.waste_qty, 0)
+  const totalSold = sold.reduce((sum, s) => sum + s, 0)
+  const stockValueDelivered = items.reduce((sum, i) => sum + i.delivered_qty * i.cost_price_usd, 0)
+  const stockValueSold = items.reduce((sum, i, idx) => sum + sold[idx] * i.cost_price_usd, 0)
+  const stockValueRemaining = items.reduce((sum, i) => sum + i.remaining_qty * i.cost_price_usd, 0)
+
+  function markAllSoldOut() {
+    setItems(items.map(i => ({ ...i, remaining_qty: 0 })))
+  }
 
   async function handleSave(closeWeek = false) {
     setSaving(true)
@@ -128,9 +143,18 @@ export default function ReconciliationEntryPage() {
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="p-5 border-b border-gray-200">
-          <h3 className="font-semibold text-gray-900">Item Count</h3>
-          <p className="text-gray-500 text-xs mt-0.5">Enter remaining qty and waste for each item</p>
+        <div className="p-5 border-b border-gray-200 flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold text-gray-900">Item Count</h3>
+            <p className="text-gray-500 text-xs mt-0.5">Enter remaining qty and waste for each item</p>
+          </div>
+          <button
+            type="button"
+            onClick={markAllSoldOut}
+            className="flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <ListChecks size={14} /> Mark All Sold Out
+          </button>
         </div>
         <table className="w-full text-sm">
           <thead>
@@ -142,19 +166,27 @@ export default function ReconciliationEntryPage() {
               <th className="text-left px-4 py-3 text-gray-500 font-medium">Waste Reason</th>
               <th className="text-center px-4 py-3 text-gray-500 font-medium">Sold</th>
               <th className="text-right px-4 py-3 text-gray-500 font-medium">Revenue</th>
+              <th className="text-right px-4 py-3 text-gray-500 font-medium">Stock Cost</th>
             </tr>
           </thead>
           <tbody>
             {items.map((item, i) => (
-              <tr key={item.product_id} className="border-b border-gray-100 hover:bg-gray-50">
-                <td className="px-4 py-2.5 text-gray-900 text-sm font-medium" dir="rtl">{item.product_name}</td>
+              <tr key={item.product_id} className={`border-b border-gray-100 hover:bg-gray-50 ${overCounted[i] ? 'bg-red-50 hover:bg-red-50' : ''}`}>
+                <td className="px-4 py-2.5 text-gray-900 text-sm font-medium" dir="rtl">
+                  {item.product_name}
+                  {overCounted[i] && (
+                    <span className="flex items-center gap-1 text-[11px] font-normal text-red-600 mt-0.5" dir="ltr">
+                      <AlertTriangle size={11} /> Remaining + waste exceeds delivered
+                    </span>
+                  )}
+                </td>
                 <td className="px-4 py-2.5 text-center text-gray-500">{item.delivered_qty}</td>
                 <td className="px-4 py-2.5">
                   <input
-                    type="number" min="0" max={item.delivered_qty}
+                    type="number" min="0"
                     value={item.remaining_qty}
                     onChange={e => updateItem(i, 'remaining_qty', Number(e.target.value))}
-                    className="w-20 bg-white border border-gray-300 rounded px-2 py-1 text-gray-900 text-sm text-center focus:outline-none focus:border-amber-500 mx-auto block"
+                    className={`w-20 bg-white border rounded px-2 py-1 text-gray-900 text-sm text-center focus:outline-none mx-auto block ${overCounted[i] ? 'border-red-400 focus:border-red-500' : 'border-gray-300 focus:border-amber-500'}`}
                   />
                 </td>
                 <td className="px-4 py-2.5">
@@ -178,10 +210,41 @@ export default function ReconciliationEntryPage() {
                 </td>
                 <td className="px-4 py-2.5 text-center font-medium text-amber-600">{sold[i]}</td>
                 <td className="px-4 py-2.5 text-right text-green-600 text-xs">{formatLBP(sold[i] * item.selling_price_lbp)}</td>
+                <td className="px-4 py-2.5 text-right text-gray-500 text-xs">{formatUSD(item.delivered_qty * item.cost_price_usd)}</td>
               </tr>
             ))}
           </tbody>
+          <tfoot>
+            <tr className="border-t-2 border-gray-200 bg-gray-50 font-semibold text-gray-900">
+              <td className="px-4 py-3">Total</td>
+              <td className="px-4 py-3 text-center">{totalDelivered}</td>
+              <td className="px-4 py-3 text-center">{totalRemaining}</td>
+              <td className="px-4 py-3 text-center">{totalWaste}</td>
+              <td className="px-4 py-3" />
+              <td className="px-4 py-3 text-center text-amber-700">{totalSold}</td>
+              <td className="px-4 py-3 text-right text-green-700">{formatLBP(expectedCash)}</td>
+              <td className="px-4 py-3 text-right text-gray-600">{formatUSD(stockValueDelivered)}</td>
+            </tr>
+          </tfoot>
         </table>
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-3">
+        <h3 className="font-semibold text-gray-900">Stock Value (USD)</h3>
+        <div className="grid grid-cols-3 gap-4 text-sm">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <p className="text-gray-500 text-xs mb-1">Delivered</p>
+            <p className="font-semibold text-gray-900">{formatUSD(stockValueDelivered)}</p>
+          </div>
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <p className="text-gray-500 text-xs mb-1">Sold (Cost)</p>
+            <p className="font-semibold text-gray-900">{formatUSD(stockValueSold)}</p>
+          </div>
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+            <p className="text-gray-500 text-xs mb-1">Remaining</p>
+            <p className="font-semibold text-gray-900">{formatUSD(stockValueRemaining)}</p>
+          </div>
+        </div>
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 space-y-4">
